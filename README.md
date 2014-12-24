@@ -13,7 +13,7 @@ UnnoJS is focused to simplify build reactive Web applications, using React to bu
 
 You must need gulp installed globally.
 
-   $ npm install
-   $ gulp
+    $ npm install
+    $ gulp
 
-After that into `build` folder you'll be unno.min.js file.
+After that into `build` folder you'll be `unno.min.js` file.
