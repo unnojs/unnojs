@@ -1,7 +1,7 @@
 /**
  * Application (entry point)
  */
-regular.component('App', ['$dom', 'ContactTable', 'ContactForm', 'Footer'],
+Unno.component('App', ['$dom', 'ContactTable', 'ContactForm', 'Footer'],
 function(D, table, form, footer) {
    'use strict';
 
@@ -37,7 +37,7 @@ function(D, table, form, footer) {
 /**
  * Footer page component
  */
-regular.component('Footer', ['$dom'], function(D) {
+Unno.component('Footer', ['$dom'], function(D) {
 
    var Footer = {
       render: function() {
@@ -55,7 +55,7 @@ regular.component('Footer', ['$dom'], function(D) {
 /**
  * Contact Form
  */
-regular.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
+Unno.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
    var div = D.div, label = D.label, input = D.input, button = D.button;
 
    var ContactForm = {
@@ -67,7 +67,7 @@ regular.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
 
       handleSave: function(e) {
          e.stopPropagation();
-         regular.trigger('ContactStore.add', this.state);
+         Unno.trigger('ContactStore.add', this.state);
          this.setState({ name:'', email:'' });
       },
 
@@ -108,7 +108,7 @@ regular.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
 /**
  * Contact Table
  */
-regular.component('ContactTable', ['$dom'], function(D) {
+Unno.component('ContactTable', ['$dom'], function(D) {
 
    var TableHeader = [
       D.th({key:1, width:'25%'}, '#'),
@@ -123,15 +123,15 @@ regular.component('ContactTable', ['$dom'], function(D) {
       },
 
       componentWillMount: function() {
-         this.eventId = regular.listen('ContactStoreChange', this.handleUpdate)
+         this.eventId = Unno.listen('ContactStoreChange', this.handleUpdate)
       },
 
       componentWillUnmount: function() {
-         regular.unlisten(this.eventId);
+         Unno.unlisten(this.eventId);
       },
 
       componentDidMount: function() {
-         regular.trigger('ContactStore.list');
+         Unno.trigger('ContactStore.list');
       },
 
       handleUpdate: function(err, list) {
@@ -145,7 +145,7 @@ regular.component('ContactTable', ['$dom'], function(D) {
          e.stopPropagation();
          var val = e.target.getAttribute('data-id');
          if (confirm('Are you wish remove this contact ?')) {
-            regular.trigger('ContactStore.remove', val);
+            Unno.trigger('ContactStore.remove', val);
          }
       },
 
