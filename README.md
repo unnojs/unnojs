@@ -1,4 +1,6 @@
-unnojs
+UnnoJS
 ======
 
-Simple Toolkit for Modern Web Application
+Simple Toolkit to Build Modern Web Applications
+
+## TODO ##
