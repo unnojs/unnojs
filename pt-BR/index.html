@@ -45,7 +45,7 @@
 
             <div class="column">
                <h3>Porquê?</h3>
-               <p>Porque nós gostariamos de ter um tollkit para nos ajudar no desenvolvimento escalável de aplicações Web reativas sem nos preocuparmos com os detalhes de integração de outros frameworks, então poderíamos trabalhar numa abstração de código sem detalhes de baixo nivel.</p>
+               <p>Porque nós gostariamos de ter um toolkit para nos ajudar no desenvolvimento escalável de aplicações Web reativas sem nos preocuparmos com os detalhes de integração de outros frameworks, então poderíamos trabalhar numa abstração de código sem detalhes de baixo nivel.</p>
             </div>
 
             <div class="column">
@@ -71,10 +71,10 @@
      // code here
    });
             </code></pre>
-            <p>As you can see, Unno's syntax was inspired in Requirejs. To define a module you must pass
-               three parameters: the module's name, array of dependencies and the function module's definition.
-               The entry point module does not need to return anything, but other modules must return an object,
-               that can be injected in another module, component or store.</p>
+            <p>Como você pode ver, a sintaxe do Unno foi inspirada no Requirejs. Para definir um módulo você deve informar
+               três parametros: o nome do módulo, array de dependências e a função de definição do módulo.
+               O módulo de entrada não precisa retornar nada, mas o demais módulos devem retornar um objeto,
+               que será injetado em outro módulo, componente ou store.</p>
 
             <pre><code class="javascript">
    Unno.module('app', ['$react', 'App'], function(React, App) {
@@ -82,18 +82,18 @@
    });
             </code></pre>
 
-            <p>As you can see, we've created a module named <strong>app</strong> with two dependencies.
-               The first one is React itself and the second is <em>App</em> main component. After that we use
-               React to render the component into the page. The React runtime is handled as a special component
-               that can be injected into any module as you need. We'll talk about Addons further.</p>
+            <p>Como podemos ver, criamos um módulo chamado <strong>app</strong> com duas dependências.
+               A primeira é o próprio React e a segunda é o componente principal <em>App</em>. Após isso usamos o
+               React para renderizar o componente dentro da página. O runtime do React é tratado como um componente
+               especial que pode ser injetado em qualquer outro como você quiser. Nós falaremos sobre Addons mais a frente.</p>
          </section>
 
          <section class="topic">
             <h3>Componentes</h3>
-            <p>Components are the core of Unno toolkit and we use React to build all components. If you dont
-               know how React works, please take a look at <a href="http://facebook.github.io/react" target="_react">React</a> project page.
-               Unno allow us create component without to worry about low-level details of React. You just need create a
-               literal object and return it, no need to use React.createClass or React.createElement in your component code.</p>
+            <p>Componentes são o núcleo do toolkit do Unno e nós usamos o React para construir todos os componentes. Caso você não
+               saiba como React funciona, por favor veja o link <a href="http://facebook.github.io/react" target="_react">React</a> da página do projeto.
+               Unno nos permite criar componentes sem nos preocuparmos com detalhes de baixo nível da API React. Você precisa apenas criar um
+               objeto literal e retorná-lo, não precisa usar React.createClass ou React.createElement no código do seu componente.</p>
 
             <pre><code class="javascript">
    Unno.component('App', ['$dom'], function(DOM) {
@@ -111,18 +111,19 @@
    });
             </code></pre>
             <p>
-            We've made a simple component named <strong>App</strong> and this component depends on <strong>$dom</strong>.
-            The <strong>$dom</strong> dependency is an alias to React.DOM. Our application component just renders a <em>div</em> element
-            into the page. In this example we are using no-JSX syntax.
+            Nós criamos um componente simples chamado <strong>App</strong> e este componente depende do <strong>$dom</strong>.
+            A dependência <strong>$dom</strong> é um alias para React.DOM. Nosso componente de aplicação renderiza apenas um
+            elemento <em>div</em> na página. Neste exemplo estamos usando a sintaxe sem JSX.
             </p>
          </section>
 
          <section class="topic">
             <h3>Stores</h3>
-            <p>The Store is responsible to keep data among components besides share them.
-               Each method of the Store can be trigged like an event. In fact, this feature is slightly
-               different of other Flux implementations, that uses an Action to invoke Store methods.
-               </p>
+            <p>O Store é responsável por manter dados entre componentes alem de compartilhá-los.
+            Cada método do Store pode ser disparado como um evento. De fato, esta funcionalidade é levemente
+            diferente de outras implementação do Flux, que usam uma Ação para invocar métodos do Store.
+            </p>
+
             <pre><code class="javascript">
    Unno.store('SimpleStore', [], function() {
       'use strict';
@@ -141,14 +142,14 @@
             </code></pre>
 
             <p>
-            In this example, we've created a Stored named <strong>SimpleStore</strong>.
-            This Store has a method <em>add</em> that add some item object. After some change happens in Store
-            we call the <em>notify</em> method. This method notifies all components that are listen
-            to <em>SimpleStoreChange</em> event. Here is other convention of Unno, the pattern adopted to event name is:
-            Store's name + Change suffix. In our case the event name is 'SimpleStoreChange'.
+            Neste exemplo, criamos um Store chamado <strong>SimpleStore</strong>.
+            Este Store possui um método <em>add</em> que adiciona um objeto item. Após sofrer alguma mudança no Store
+            nós devemos chamar o método <em>notify</em>. Este método notifica todos os componentes que estivem escutando
+            o evento <em>SimpleStoreChange</em>. Aqui temos outra convenção do Unno, o padrão adotado para nome de evento é:
+            nome do Store + sufixo 'Change'. Em nosso caso o nome do evento é 'SimpleStoreChange'.
             </p>
             <p>
-            To register the event listen on component, we must do that:
+            Para registrar um escutador do evento no componente, devemos fazer:
             </p>
 
             <pre><code class="javascript">
@@ -160,25 +161,25 @@
           button = DOM.button;
 
       var Simple = {
-         // handles click button
+         // trata o clique do botoa
          handleClick: function(e) {
             e.preventDefault();
-            // trigger the method as a event passing an object as parameter
+            // dispara o metodo como um evento, passando um objeto como parametro
             Unno.trigger('SimpleStore.add', { id:1, name:'UnnoJS' });
          },
 
-         // method that will be called after notification from Store
+         // metodo que sera chamado após a notificacao do Store
          handleAddEvent: function(err, data) {
             if (err) return;
             console.log(data);
          },
 
-         // register the event listener to 'SimpleStoreChange'
+         // registra o escutador do evento para 'SimpleStoreChange'
          componentWillMount: function() {
             this.simpleEventAdd = Unno.listen('SimpleStoreChange', this.handleAddEvent);
          },
 
-         // unregister the event listener
+         // desregistra o escutador do evento
          componentWillUnmount: function() {
             Unno.unlisten(this.simpleEventAdd);
          },
@@ -195,20 +196,21 @@
    });
             </code></pre>
             <p>
-            This component code is a little bit more complex the last one. In this component we're using the Unno API
-            to work with events and trigger Store's method dynamically. We're using the lifecyle methods from React API,
-            like <em>componentWillMount</em> to register the event listener and <em>componentWillUnmount</em> to remove
-            the event listener.
+            Este código de componente é um pouco mais complexo que o último. Neste componente usamos a API do Unno
+            para trabalhar com evento e disparar métodos do Store dinamicamente. Nós usamos métodos do ciclo de vida da API React,
+            tais como <em>componentWillMount</em> para registrar o escutador do evento e <em>componentWillUnmount</em> para remover
+            o escutador do evento.
             </p>
             <p>
-            If you notice, the <em>Simple</em> component has no dependency to <em>SimpleStore</em>. The Unno's event
-            subsystem handle all complexity for us. In this case, when user click on button, Unno invoke <em>add</em>
-            method from <em>SimpleStore</em> passing an object as parameter. The store add this item and notifies all
-            components that are listen to. We've registered <em>handleAddEvent</em> method from component as a listener.
+            Se você notar, o componente <em>Simple</em> não possui nenhuma dependência com o <em>SimpleStore</em>.
+            O subsistema de eventos do Unno trata toda complexidade para nós. Neste caso, quando o usuário clica no botão,
+            o Unno invoca o método <em>add</em> do <em>SimpleStore</em> passando um objeto como parâmetro.
+            O Store adiciona este item e notifica todos os componente que estão escutando. Nós registramos o método
+            <em>handleAddEvent</em> do componente como um escutador.
             </p>
             <p>
-            The method listener has a signature convention as well. We've used the NodeJS error handling convention, where the
-            first parameter is an error object (if there is or null) and second is data from Store.
+            O método escutador possui uma convenção de assinatura também. Nós usamos a convenção de tratamento de erro do NodeJS,
+            onde o primeiro parâmetro é sempre um objeto de erro (se houver ou null) e o segundo parâmetro é o dado do Store.
             </p>
          </section>
 
@@ -240,7 +242,7 @@
       </footer>
     </div>
 
-    <script type="text/javascript" src="javascripts/highlight.min.js"></script>
+    <script type="text/javascript" src="../javascripts/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
