@@ -56,6 +56,11 @@
          <div class="clear"></div>
          <p>&nbsp;</p>
 
+         <div class="subtitle">
+            <h3>Unno is just what you need to build componentized and scalable Web applications.</h3>
+         </div>
+         <p>&nbsp;</p>
+
          <section class="topic">
             <h3>Modules</h3>
             <p>The start point is <em>module</em>. You must define an entry point of your application and you may
@@ -114,14 +119,117 @@
 
          <section class="topic">
             <h3>Stores</h3>
-            <p>TODO</p>
+            <p>The Store is responsible to keep data among components besides share them.
+               Each method of the Store can be trigged like an event. In fact, this feature is slightly
+               different of other Flux implementations, that uses an Action to invoke Store methods.
+               </p>
+            <pre><code class="javascript">
+   Unno.store('SimpleStore', [], function() {
+      'use strict';
+
+      var SimpleStore = {
+         add: function(item) {
+            var data = this.getData();
+            data.push(item);
+            this.setData(data);
+            this.notify();
+         }
+      };
+
+      return SimpleStore;
+   });
+            </code></pre>
+
+            <p>
+            In this example, we've created a Stored named <strong>SimpleStore</strong>.
+            This Store has a method <em>add</em> that add some item object. After some change happens in Store
+            we call the <em>notify</em> method. This method notifies all components that are listen
+            to <em>SimpleStoreChange</em> event. Here is other convention of Unno, the pattern adopted to event name is:
+            Store's name + Change suffix. In our case the event name is 'SimpleStoreChange'.
+            </p>
+            <p>
+            To register the event listen on component, we must do that:
+            </p>
+
+            <pre><code class="javascript">
+   Unno.component('Simple', ['$dom'], function(DOM) {
+      'use strict';
+
+      var div = DOM.div,
+          span = DOM.span,
+          button = DOM.button;
+
+      var Simple = {
+         // handles click button
+         handleClick: function(e) {
+            e.preventDefault();
+            // trigger the method as a event passing an object as parameter
+            Unno.trigger('SimpleStore.add', { id:1, name:'UnnoJS' });
+         },
+
+         // method that will be called after notification from Store
+         handleAddEvent: function(err, data) {
+            if (err) return;
+            console.log(data);
+         },
+
+         // register the event listener to 'SimpleStoreChange'
+         componentWillMount: function() {
+            this.simpleEventAdd = Unno.listen('SimpleStoreChange', this.handleAddEvent);
+         },
+
+         // unregister the event listener
+         componentWillUnmount: function() {
+            Unno.unlisten(this.simpleEventAdd);
+         },
+
+         render: function() {
+            return div({},
+               span({}, 'Simple Component'),
+               button({ type:'button', onClick: this.handleClick }, 'Click Me!')
+            )
+         }
+      };
+
+      return Simple;
+   });
+            </code></pre>
+            <p>
+            This component code is a little bit more complex the last one. In this component we're using the Unno API
+            to work with events and trigger Store's method dynamically. We're using the lifecyle methods from React API,
+            like <em>componentWillMount</em> to register the event listener and <em>componentWillUnmount</em> to remove
+            the event listener.
+            </p>
+            <p>
+            If you notice, the <em>Simple</em> component has no dependency to <em>SimpleStore</em>. The Unno's event
+            subsystem handle all camplexity for us. In this case, when user click on button, Unno invoke <em>add</em>
+            method from <em>SimpleStore</em> passing an object as parameter. The store add this item and notifies all
+            components that are listen to. We've registered <em>handleAddEvent</em> method from component as a listener.
+            </p>
+            <p>
+            The method listener has a signature convention as well. We've used the NodeJS error handling convention, where the
+            first parameter is an error object (if there is or null) and second is data from Store.
+            </p>
          </section>
 
          <section class="topic">
             <h3>Addons</h3>
-            <p>TODO</p>
+            <p>Unno provides you extensions, called Addons. Many those are from React core itself.
+            Each addon has its own alias, prefixed with '$' sign. Some has already used in our examples, eg. $react or $dom.
+            Here are a list of all addons avaiable in Unno's runtime.
+            </p>
+            <pre><code class="jquery">
+   $react: React library
+   $dom: An alias to React.DOM
+   $storage: An abstraction to work with LocalStorage API
+   $addons: An alias to native React Addons
+   $router: The ReactRouter component bundled with.
+            </code></pre>
+
+            <p>Please see the examples for more details.</p>
          </section>
 
+         <p>&nbsp;</p>
       </section>
     </div>
 
