@@ -311,11 +311,10 @@ Full-Width Styles
 
 #header_wrap {
   background: #fbf0e3;
-  /*background: -moz-linear-gradient(top, #CF3300, #CF5300);
-  background: -webkit-linear-gradient(top, #CF3300, #CF5300);
-  background: -ms-linear-gradient(top, #CF3300, #CF5300);
-  background: -o-linear-gradient(top, #CF3300, #CF5300);
-  background: linear-gradient(top, #CF3300, #CF5300); */
+  background-image: url('../images/unno-flow.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
 }
 
 #header_wrap .inner {
@@ -325,16 +324,21 @@ Full-Width Styles
 #project_title {
   margin: 0;
   color: #fff;
-  font-size: 42px;
+  font-size: 56px;
   font-weight: 700;
   text-shadow: #111 0px 0px 10px;
 }
 
 .subtitle { text-align:center; }
 
-.project_icon {
+.logo, .logo_icon, .logo_name, .logo_sufix { float:left; }
+.logo_name, .logo_sufix { padding-top:16px; }
+.logo_name { color:#F3B667; }
+.logo_sufix { color:#CF5300; }
+
+.logo_icon img {
    border:0;
-   width:65px;
+   width:75px;
    box-shadow: 0 0 0;
    padding-right:-1px;
    -webkit-box-shadow: 0 0;
