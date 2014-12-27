@@ -1,13 +1,4 @@
-/*******************************************************************************
-Slate Theme for GitHub Pages
-by Jason Costello, @jsncostello
-*******************************************************************************/
-
 @import url(pygment_trac.css);
-
-/*******************************************************************************
-MeyerWeb Reset
-*******************************************************************************/
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -260,13 +251,15 @@ form {
 Full-Width Styles
 *******************************************************************************/
 
+.clear { clear:both; }
+
 .outer {
   width: 100%;
 }
 
 .inner {
   position: relative;
-  max-width: 640px;
+  max-width: 850px;
   padding: 20px 10px;
   margin: 0 auto;
 }
@@ -287,12 +280,12 @@ Full-Width Styles
 }
 
 #header_wrap {
-  background: #212121;
-  background: -moz-linear-gradient(top, #373737, #212121);
-  background: -webkit-linear-gradient(top, #373737, #212121);
-  background: -ms-linear-gradient(top, #373737, #212121);
-  background: -o-linear-gradient(top, #373737, #212121);
-  background: linear-gradient(top, #373737, #212121);
+  background: #CF5300;
+  background: -moz-linear-gradient(top, #CF3300, #CF5300);
+  background: -webkit-linear-gradient(top, #CF3300, #CF5300);
+  background: -ms-linear-gradient(top, #CF3300, #CF5300);
+  background: -o-linear-gradient(top, #CF3300, #CF5300);
+  background: linear-gradient(top, #CF3300, #CF5300);
 }
 
 #header_wrap .inner {
@@ -307,9 +300,22 @@ Full-Width Styles
   text-shadow: #111 0px 0px 10px;
 }
 
+.subtitle { text-align:center; }
+
+.project_icon {
+   border:0;
+   width:65px;
+   box-shadow: 0 0 0;
+   padding-right:-1px;
+   -webkit-box-shadow: 0 0;
+   -moz-box-shadow: 0 0 0;
+   -o-box-shadow: 0 0 0;
+   -ms-box-shadow: 0 0 0;
+}
+
 #project_tagline {
   color: #fff;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 300;
   background: none;
   text-shadow: #111 0px 0px 10px;
@@ -323,6 +329,27 @@ Full-Width Styles
   right: 0;
   height: 70px;
   background: url('../images/icon_download.png') no-repeat 0% 90%;
+}
+
+.column {
+   float:left;
+   width:32%;
+   border:1px;
+   margin-left:10px;
+   background-color:#FEFEFE;
+}
+
+.column h3 { text-align:center; }
+
+.topic {
+   padding: 0px 10px 0px 10px;
+   border: 1px solid #CF5300;
+   background-color:#FEFEFE;
+   border-radius: 7px;
+   -moz-border-radius: 7px;
+   -webkit-border-radius: 7px;
+   -o-border-radius: 7px;
+   margin-top:15px;
 }
 
 .zip_download_link {
@@ -367,8 +394,6 @@ Full-Width Styles
 #footer_wrap {
   background: #212121;
 }
-
-
 
 /*******************************************************************************
 Small Device Styles
