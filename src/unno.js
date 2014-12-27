@@ -34,10 +34,6 @@
        if (to.prototype) { to.prototype[key] = from[key]; }
        else { to[key] = from[key]; }
      });
-      // for(var key in from) {
-      //    if (to.prototype) { to.prototype[key] = from[key]; }
-      //    else { to[key] = from[key]; }
-      // }
    }
 
    /* -----------------------------------------------------------------------
