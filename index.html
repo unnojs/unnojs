@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="description" content="UnnoJS : Simple Toolkit for Modern Web Application">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/default.min.css">
     <title>UnnoJS</title>
   </head>
 
@@ -39,17 +40,17 @@
          <div>
             <div class="column">
                <h3>Goal</h3>
-               <p></p>
+               <p>Build a toolkit to work with React library and others extensions (DI, Router, LocalStorage, etc). That way simplify the Web development using Web components concept, integrated with one way data flow as well.</p>
             </div>
 
             <div class="column">
                <h3>Why?</h3>
-               <p></p>
+               <p>Because we would like to have a toolkit to help us in developing scaleable Reactive Web applications without to worry about of other frameworks integration details, so we could work in the application code abstracting other low-level details.</p>
             </div>
 
             <div class="column">
                <h3>Contribute</h3>
-               <p></p>
+               <p>We ask to community to send us feedback, report bugs and share your experience.</p>
             </div>
          </div>
          <div class="clear"></div>
@@ -57,17 +58,27 @@
 
          <section class="topic">
             <h3>Modules</h3>
-            <p>&nbsp;</p>
+            <p>The start point is <em>module</em>. You must define an entry point of your application and you may
+               create a module named <strong>main</strong> or <strong>app</strong>. Unno will treat them as a entry
+               point, it is a convention.</p>
+            <pre><code class="javascript">
+   Unno.module('main', [/* deps */], function() {
+     // code here
+   });
+            </code></pre>
+            <p>As you can see above, Unno's syntax was inspired in Requirejs. To define a module you must pass
+               three parameters: the module's name, array of dependencies and the function module's definition.
+               The entry point module does not need to return anything, but other modules must return an object, that can be used to inject in another module, component or store.</p>
          </section>
 
          <section class="topic">
             <h3>Components</h3>
-            <p>&nbsp;</p>
+            <p>TODO</p>
          </section>
 
          <section class="topic">
             <h3>Stores</h3>
-            <p>aldkfhalkdfjalkdfjlakdf  adlkfjadlkfj aldkfjadl kjalkdfja dfreuofiajdf adoifjao dsifao dfuaodfuaodfu aodifua dfioad foiaudf oajdf oaiud oiadf oiaud foia ioadfoaiudfo8ao fkandlkjad kj alkdnao dfuao dfjoadjfad</p>
+            <p>TODO</p>
          </section>
 
       </section>
@@ -80,5 +91,7 @@
       </footer>
     </div>
 
+    <script type="text/javascript" src="javascripts/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
