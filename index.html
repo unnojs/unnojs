@@ -66,18 +66,59 @@
      // code here
    });
             </code></pre>
-            <p>As you can see above, Unno's syntax was inspired in Requirejs. To define a module you must pass
+            <p>As you can see, Unno's syntax was inspired in Requirejs. To define a module you must pass
                three parameters: the module's name, array of dependencies and the function module's definition.
-               The entry point module does not need to return anything, but other modules must return an object, that can be used to inject in another module, component or store.</p>
+               The entry point module does not need to return anything, but other modules must return an object,
+               that can be injected in another module, component or store.</p>
+
+            <pre><code class="javascript">
+   Unno.module('app', ['$react', 'App'], function(React, App) {
+      React.render(App({}), document.getElementById('app'));
+   });
+            </code></pre>
+
+            <p>As you can see, we've created a module named <strong>app</strong> with two dependencies.
+               The first one is React itself and the second is <em>App</em> main component. After that we use
+               React to render the component into the page. The React runtime is handled as a special component
+               that can be injected into any module as you need. We'll talk about Addons further.</p>
          </section>
 
          <section class="topic">
             <h3>Components</h3>
-            <p>TODO</p>
+            <p>Components are the core of Unno toolkit and we use React to build all components. If you dont
+               know how React works, please take a look at <a href="http://facebook.github.io/react" target="_react">React</a> project page.
+               Unno allow us create component without to worry about low-level details of React. You just need create a
+               literal object and return it, no need to use React.createClass or React.createElement in your component code.</p>
+
+            <pre><code class="javascript">
+   Unno.component('App', ['$dom'], function(DOM) {
+      'use strict';
+
+      var div = DOM.div;
+
+      var App = {
+         render: function() {
+            return div({}, 'Application Component')
+         }
+      };
+
+      return App;
+   });
+            </code></pre>
+            <p>
+            We've made a simple component named <strong>App</strong> and this component depends on <strong>$dom</strong>.
+            The <strong>$dom</strong> dependency is an alias to React.DOM. Our application component just renders a <em>div</em> element
+            into the page. In this example we are using no-JSX syntax.
+            </p>
          </section>
 
          <section class="topic">
             <h3>Stores</h3>
+            <p>TODO</p>
+         </section>
+
+         <section class="topic">
+            <h3>Addons</h3>
             <p>TODO</p>
          </section>
 
