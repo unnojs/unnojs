@@ -4,8 +4,8 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="description" content="UnnoJS : Simple Toolkit for Modern Web Application">
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/default.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/default.min.css">
     <title>UnnoJS</title>
   </head>
 
@@ -17,7 +17,7 @@
           <a id="forkme_banner" href="https://github.com/unnojs/unnojs">View on GitHub</a>
 
           <h1 id="project_title">
-             <img class="project_icon" src="images/unno_small.png"></img>
+             <img class="project_icon" src="../images/unno_small.png"></img>
           </h1>
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/unnojs/unnojs/zipball/master">Download this project as a .zip file</a>
@@ -32,40 +32,40 @@
 
          <p>&nbsp;</p>
          <div class="subtitle">
-            <h3>Simple Toolkit to Build Modern Web Applications</h3>
+            <h3>Toolkit Simples para Construção de Aplicações Web Modernas</h3>
          </div>
 
          <p>&nbsp;</p>
          <div class="clear"></div>
          <div>
             <div class="column">
-               <h3>Goal</h3>
-               <p>Build a toolkit to work with React library and others extensions (DI, Router, LocalStorage, etc). That way simplify the Web development using Web components concept, integrated with one way data flow as well.</p>
+               <h3>Objetivo</h3>
+               <p>Construir um toolkit para trabalhar com a biblioteca React e outras extensões (DI, Router, LocalStorage, etc). De forma a simplificar o desenvolvimento Web usando conceitos de componentes, integrados também com fluxo de dados único.</p>
             </div>
 
             <div class="column">
-               <h3>Why?</h3>
-               <p>Because we would like to have a toolkit to help us in developing scaleable Reactive Web applications without to worry about of other frameworks integration details, so we could work in the application code abstracting other low-level details.</p>
+               <h3>Porquê?</h3>
+               <p>Porque nós gostariamos de ter um tollkit para nos ajudar no desenvolvimento escalável de aplicações Web reativas sem nos preocuparmos com os detalhes de integração de outros frameworks, então poderíamos trabalhar numa abstração de código sem detalhes de baixo nivel.</p>
             </div>
 
             <div class="column">
-               <h3>Contribute</h3>
-               <p>We ask to community to send us feedback, report bugs and share your experience.</p>
+               <h3>Contribua</h3>
+               <p>Nós pedimos para comunidade nos enviar feedback, reportar bugs e compartilhar suas experiências.</p>
             </div>
          </div>
          <div class="clear"></div>
          <p>&nbsp;</p>
 
          <div class="subtitle">
-            <h3>Unno is just what you need to build componentized and scalable Web applications.</h3>
+            <h3>Unno é apenas o que você precisa para construir aplicações Web componentizadas e escaláveis.</h3>
          </div>
          <p>&nbsp;</p>
 
          <section class="topic">
-            <h3>Modules</h3>
-            <p>The start point is <em>module</em>. You must define an entry point of your application and you may
-               create a module named <strong>main</strong> or <strong>app</strong>. Unno will treat them as a entry
-               point, it is a convention.</p>
+            <h3>Modulos</h3>
+            <p>O ponto de partida é <em>module</em>. Você deve definir um ponto de entrada da sua aplicação e você pode
+               criar um módulo chamado <strong>main</strong> ou <strong>app</strong>. Unno irá trata-los como ponto de entrada,
+               isso é uma convenção do Unno.</p>
             <pre><code class="javascript">
    Unno.module('main', [/* deps */], function() {
      // code here
@@ -89,7 +89,7 @@
          </section>
 
          <section class="topic">
-            <h3>Components</h3>
+            <h3>Componentes</h3>
             <p>Components are the core of Unno toolkit and we use React to build all components. If you dont
                know how React works, please take a look at <a href="http://facebook.github.io/react" target="_react">React</a> project page.
                Unno allow us create component without to worry about low-level details of React. You just need create a
@@ -214,19 +214,19 @@
 
          <section class="topic">
             <h3>Addons</h3>
-            <p>Unno provides you extensions, called Addons. Many those are from React core itself.
-            Each addon has its own alias, prefixed with '$' sign. Some have been already used in our examples, eg. $react and $dom.
-            Here are a list of all addons avaiable in Unno's runtime.
+            <p>Unno fornece a você estensões, chamadas de Addons. Muitas dessas estensões são do core do próprio React.
+            Cada addon possui seu próprio alias, prefixado com símbolo '$'. Algumas já foram usadas em nossos exemplos, ex. $react e $dom.
+            Aqui está uma lista de todos os addons disponíveis no runtime do Unno.
             </p>
             <pre><code class="jquery">
-   $react: React library
-   $dom: An alias to React.DOM
-   $storage: An abstraction to work with LocalStorage API
-   $addons: An alias to native React Addons
-   $router: The ReactRouter component bundled with.
+   $react: biblioteca React
+   $dom: Apenas um alias para React.DOM
+   $storage: Uma abstração para trabalhar com a API LocalStorage
+   $addons: Apenas alias para addons nativo do React
+   $router: O componente ReactRouter ja empacotado.
             </code></pre>
 
-            <p>Please see the examples for more details.</p>
+            <p>Por favor veja os exemplos para maiores detalhes.</p>
          </section>
 
          <p>&nbsp;</p>
