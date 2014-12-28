@@ -1,10 +1,16 @@
 {
   "name": "unnojs",
   "description": "Simple Toolkit to Build Modern Web Applications.",
-  "author": "Keuller Magalhaes",
-  "version": "0.0.1",
+  "author": "Unnojs <unnojs@yahoo.com>",
+  "contributors": [
+     "David Farias <davidnfarias@gmail.com>",
+     "Keuller Magalhaes <keuller.magalhaes@gmail.com>",
+  ],
+  "version": "1.0.0",
   "private": false,
-  "scripts": {},
+  "scripts": {
+     "build": "gulp"
+  },
   "dependencies": {
     "react": "^0.12.2",
     "react-router": "^0.11.6"
@@ -17,13 +23,23 @@
     "gulp-jshint": "^1.9.0",
     "gulp-uglify": "^1.0.2"
   },
-  "main": "app.js",
-  "repository": {},
+  "main": "./src/unno.js",
+  "bugs": {
+     "url": "https://github.com/unnojs/unnojs/issues"
+  },
+  "repository": {
+     "type": "git",
+     "url": "https://github.com/unnojs/unnojs.git"
+  },
   "keywords": [
     "react",
     "flux",
     "react-router"
   ],
-  "license": "MIT",
+  "licenses": [
+     {
+        "type": "MIT"
+     }
+  ],
   "homepage": "http://unnojs.github.io/unnojs"
 }
