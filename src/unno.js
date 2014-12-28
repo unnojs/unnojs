@@ -163,6 +163,7 @@
    }
 
    global.Unno = {
+      VERSION: '1.0.0',
       util: {
          each: each,
          merge: _merge,
