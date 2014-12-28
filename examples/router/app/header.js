@@ -11,7 +11,7 @@ Unno.component('Header', ['$react', '$dom', '$router'], function(React, D, Route
                D.div({ className:'container' },
                   D.ul({ className:'navigation' },
                      D.li({}, String.fromCharCode(160)),
-                     D.li({}, D.img({ src:'../logo/unno_150.png', width:'45'})),
+                     D.li({}, D.img({ src:'../assets/img/unno_150.png', width:'45'})),
                      D.li({}, String.fromCharCode(160)),
                      D.li({}, Linker({ to:'/' }, 'Home')),
                      D.li({}, Linker({ to:'about'}, 'About'))
