@@ -30,9 +30,9 @@ gulp.task('gzip', function() {
    .pipe(gulp.dest('./build'));
 });
 
-gulp.task('default', ['clean','jshint', 'gzip'], function() {
+gulp.task('default', ['clean','jshint'], function() {
    gulp.src(deps)
        .pipe(concat('unno.min.js'))
-       //.pipe(uglify())
+       .pipe(uglify())
        .pipe(gulp.dest('./build'));
 });
