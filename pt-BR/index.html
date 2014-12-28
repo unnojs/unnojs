@@ -47,17 +47,21 @@
          <div>
             <div class="column">
                <h3>Objetivo</h3>
-               <p>Construir um toolkit para trabalhar com a biblioteca React e outras extensões (DI, Router, LocalStorage, etc). De forma a simplificar o desenvolvimento Web usando conceitos de componentes, integrados também com fluxo de dados único.</p>
+               <p>Construir um toolkit para trabalhar com a biblioteca React e outras extensões
+                  (DI, Router, LocalStorage, etc) integradas. Dessa forma simplificando o desenvolvimento Web
+                  baseado em componentes e integrados com um mecanismo de fluxo de dados (Flux).</p>
             </div>
 
             <div class="column">
                <h3>Porquê?</h3>
-               <p>Porque nós gostariamos de ter um toolkit para nos ajudar no desenvolvimento escalável de aplicações Web reativas sem nos preocuparmos com os detalhes de integração de outros frameworks, então poderíamos trabalhar numa abstração de código sem detalhes de baixo nivel.</p>
+               <p>Porque nós gostariamos de oferecer um toolkit completo que nos ajudaria no desenvolvimento de
+                  aplicações Web com UI reativas, enquanto que não queriamos nos preocupar com os detalhes de integração
+                  e expor também uma API simples para os desenvolvedores.</p>
             </div>
 
             <div class="column">
                <h3>Contribua</h3>
-               <p>Nós pedimos para comunidade nos enviar feedback, reportar bugs e compartilhar suas experiências.</p>
+               <p>Nós pedimos para comunidade nos enviar feedback, reportar bugs, compartilhar suas experiências e ajude-nos com sugestões para melhoria e crescimento do projeto.</p>
             </div>
          </div>
          <div class="clear"></div>
@@ -70,8 +74,8 @@
 
          <section class="topic">
             <h3>Modulos</h3>
-            <p>O ponto de partida é <em>module</em>. Você deve definir um ponto de entrada da sua aplicação e você pode
-               criar um módulo chamado <strong>main</strong> ou <strong>app</strong>. Unno irá trata-los como ponto de entrada,
+            <p>O ponto de entrada é <em class="code">module</em>. Você deve definir um ponto de entrada da sua aplicação e você pode
+               criar um módulo chamado <em class="code">main</em> ou <em class="code">app</em>. Unno irá trata-los como ponto de entrada,
                isso é uma convenção do Unno.</p>
             <pre><code class="javascript">
    Unno.module('main', [/* deps */], function() {
@@ -89,8 +93,8 @@
    });
             </code></pre>
 
-            <p>Como podemos ver, criamos um módulo chamado <strong>app</strong> com duas dependências.
-               A primeira é o próprio React e a segunda é o componente principal <em>App</em>. Após isso usamos o
+            <p>Como podemos ver, criamos um módulo chamado <em class="code">app</em> com duas dependências.
+               A primeira é o próprio React e a segunda é o componente principal <em class="code">App</em>. Após isso usamos o
                React para renderizar o componente dentro da página. O runtime do React é tratado como um componente
                especial que pode ser injetado em qualquer outro como você quiser. Nós falaremos sobre Addons mais a frente.</p>
          </section>
@@ -118,9 +122,9 @@
    });
             </code></pre>
             <p>
-            Nós criamos um componente simples chamado <strong>App</strong> e este componente depende do <strong>$dom</strong>.
-            A dependência <strong>$dom</strong> é um alias para React.DOM. Nosso componente de aplicação renderiza apenas um
-            elemento <em>div</em> na página. Neste exemplo estamos usando a sintaxe sem JSX.
+            Nós criamos um componente simples chamado <em class="code">App</em> e este componente depende do <em class="code">$dom</em>.
+            A dependência <em class="code">$dom</em> é um alias para React.DOM. Nosso componente de aplicação renderiza apenas um
+            elemento <em class="code">div</em> na página. Neste exemplo estamos usando a sintaxe sem JSX.
             </p>
          </section>
 
@@ -149,10 +153,10 @@
             </code></pre>
 
             <p>
-            Neste exemplo, criamos um Store chamado <strong>SimpleStore</strong>.
-            Este Store possui um método <em>add</em> que adiciona um objeto item. Após sofrer alguma mudança no Store
-            nós devemos chamar o método <em>notify</em>. Este método notifica todos os componentes que estivem escutando
-            o evento <em>SimpleStoreChange</em>. Aqui temos outra convenção do Unno, o padrão adotado para nome de evento é:
+            Neste exemplo, criamos um Store chamado <em class="code">SimpleStore</em>.
+            Este Store possui um método <em class="code">add</em> que adiciona um objeto item. Após sofrer alguma mudança no Store
+            nós devemos chamar o método <em class="code">notify</em>. Este método notifica todos os componentes que estivem escutando
+            o evento <em class="code">SimpleStoreChange</em>. Aqui temos outra convenção do Unno, o padrão adotado para nome de evento é:
             nome do Store + sufixo 'Change'. Em nosso caso o nome do evento é 'SimpleStoreChange'.
             </p>
             <p>
@@ -205,15 +209,15 @@
             <p>
             Este código de componente é um pouco mais complexo que o último. Neste componente usamos a API do Unno
             para trabalhar com evento e disparar métodos do Store dinamicamente. Nós usamos métodos do ciclo de vida da API React,
-            tais como <em>componentWillMount</em> para registrar o escutador do evento e <em>componentWillUnmount</em> para remover
+            tais como <em class="code">componentWillMount</em> para registrar o escutador do evento e <em class="code">componentWillUnmount</em> para remover
             o escutador do evento.
             </p>
             <p>
-            Se você notar, o componente <em>Simple</em> não possui nenhuma dependência com o <em>SimpleStore</em>.
+            Se você notar, o componente <em class="code">Simple</em> não possui nenhuma dependência com o <em class="code">SimpleStore</em>.
             O subsistema de eventos do Unno trata toda complexidade para nós. Neste caso, quando o usuário clica no botão,
-            o Unno invoca o método <em>add</em> do <em>SimpleStore</em> passando um objeto como parâmetro.
+            o Unno invoca o método <em class="code">add</em> do <em class="code">SimpleStore</em> passando um objeto como parâmetro.
             O Store adiciona este item e notifica todos os componente que estão escutando. Nós registramos o método
-            <em>handleAddEvent</em> do componente como um escutador.
+            <em class="code">handleAddEvent</em> do componente como um escutador.
             </p>
             <p>
             O método escutador possui uma convenção de assinatura também. Nós usamos a convenção de tratamento de erro do NodeJS,
@@ -238,6 +242,32 @@
             <p>Por favor veja os exemplos para maiores detalhes.</p>
          </section>
 
+         <section class="topic">
+            <h3>Utilities</h3>
+            <p>Unno não possui dependência externa e ele fornece algumas funções utilitárias que
+               podemos usar em nosso código. O namespace interno <em class="code">util</em> fornece:</p>
+            <pre><code class="jquery">
+   Unno.util.each(lista, callback)
+      Utiliza o 'callback' para iterar sobre a 'lista'.
+
+   Unno.util.merge(from, target)
+      Copia as propriedades do objeto 'from' para o objeto 'target'.
+
+   Unno.util.isNull(value)
+      Retorna true se o 'value' é nulo ou false caso contrário.
+
+   Unno.util.isObject(value)
+      Retorna true se o 'value' é um objeto ou false caso contrário.
+
+   Unno.util.isArray(value)
+      Retorna true se 'value' é um array ou false caso contrário.
+
+   Unno.util.isFunction(value)
+      Retorna true se 'value' é uma função ou false caso contrário.
+            </code></pre>
+
+            <p>&nbsp;</p>
+         </section>
          <p>&nbsp;</p>
       </section>
     </div>
