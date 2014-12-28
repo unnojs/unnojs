@@ -13,7 +13,7 @@ function(D, table, form, footer) {
             D.nav({className:'navbar navbar-default navbar-fixed-top'},
                div({className:'container'},
                   div({className:'navbar-header'},
-                     D.img({className:'icon-brand', src:'../logo/unno_150.png'}),
+                     D.img({className:'icon-brand', src:'../assets/img/unno_150.png'}),
                      D.a({className:'navbar-brand', href:'#'},
                         D.span({}, 'CRUD')
                      )
