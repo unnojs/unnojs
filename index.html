@@ -207,7 +207,7 @@
             <p>
             This component code is a little bit more complex the last one. In this component we're using the Unno API
             to work with events and trigger Store's method dynamically. We're using the lifecyle methods from React API,
-            such as <em class="code">componentWillMount</em> to register the event listener and <em>componentWillUnmount</em> to remove
+            such as <em class="code">componentWillMount</em> to register the event listener and <em class="code">componentWillUnmount</em> to remove
             the event listener.
             </p>
             <p>
@@ -224,7 +224,7 @@
 
          <section class="topic">
             <h3>Addons</h3>
-            <p>Unno provides us extensions, called Addons. Many those are from React core itself.
+            <p>Unno provides us extensions, called Addons. Many of them are from React core itself.
             Each addon has its own alias, prefixed with '$' sign. Some have been already used in our examples, eg. $react and $dom.
             Here are a list of all addons avaiable in Unno's runtime.
             </p>
@@ -237,6 +237,33 @@
             </code></pre>
 
             <p>Please see the examples for more details.</p>
+         </section>
+
+         <section class="topic">
+            <h3>Utilities</h3>
+            <p>Unno has no external dependency and it provides some helper functions that
+               we can use in our code. <em class="code">util</em> inner namespace provides:</p>
+            <pre><code class="jquery">
+   Unno.util.each(list, callback)
+      Uses callback to iterate over a list.
+
+   Unno.util.merge(from, target)
+      Copy properties 'from' object in 'target' object.
+
+   Unno.util.isNull(value)
+      Returns true if 'value' is null or false otherwise.
+
+   Unno.util.isObject(value)
+      Returns true if 'value' is an object or false otherwise.
+
+   Unno.util.isArray(value)
+      Returns true if 'value' is an array or false otherwise.
+
+   Unno.util.isFunction(value)
+      Returns true if 'value' is a function or false otherwise.
+            </code></pre>
+
+            <p>&nbsp;</p>
          </section>
 
          <p>&nbsp;</p>
