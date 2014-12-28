@@ -124,6 +124,8 @@ strong {
   font-weight: bold;
 }
 
+.code { color:#CF5300; }
+
 img {
   position: relative;
   margin: 0 auto;
