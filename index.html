@@ -46,17 +46,20 @@
          <div>
             <div class="column">
                <h3>Goal</h3>
-               <p>Build a toolkit to work with React library and others extensions (DI, Router, LocalStorage, etc). That way simplify the Web development using Web components concept, integrated with one way data flow as well.</p>
+               <p>Build a toolkit to work with React library and others extensions (DI, Router, LocalStorage, etc) integrated.
+                  Thus simplifying Web development based on Web components and integrated into a data flow mechanism (Flux).</p>
             </div>
 
             <div class="column">
                <h3>Why?</h3>
-               <p>Because we would like to have a toolkit to help us in developing scaleable Reactive Web applications without to worry about of other frameworks integration details, so we could work in the application code abstracting other low-level details.</p>
+               <p>Because we would like to offer a complete toolkit that will help us to develop Web applications with reactive UI
+                  while we don't want to worry about integration details and also expose a simple API for developers.</p>
             </div>
 
             <div class="column">
                <h3>Contribute</h3>
-               <p>We ask to community to send us feedback, report bugs and share your experience.</p>
+               <p>We ask to community to send us feedback, report bugs, share your experience and help us with suggestions
+                  for improvement and project growth.</p>
             </div>
          </div>
          <div class="clear"></div>
@@ -69,18 +72,18 @@
 
          <section class="topic">
             <h3>Modules</h3>
-            <p>The start point is <em>module</em>. You must define an entry point of your application and you may
-               create a module named <strong>main</strong> or <strong>app</strong>. Unno will treat them as a entry
-               point, it is a convention.</p>
+            <p>The entry point is <em class="code">module</em>. We must define an entry point of our application
+            and to do that we must create a module called <em class="code">main</em> or <em class="code">app</em>.
+            Unno will handle it as a entry point, it is a first Unno's convention.</p>
             <pre><code class="javascript">
    Unno.module('main', [/* deps */], function() {
      // code here
    });
             </code></pre>
-            <p>As you can see, Unno's syntax was inspired in Requirejs. To define a module you must pass
-               three parameters: the module's name, array of dependencies and the function module's definition.
-               The entry point module does not need to return anything, but other modules must return an object,
-               that can be injected in another module, component or store.</p>
+            <p>As we can see, Unno's syntax was inspired in Requirejs. To define a module we must pass
+               three parameters: the module's name, array of dependencies and the module definition function.
+               The entry module does not need to return anything, but other modules must return an object,
+               that will be injected in another module, component or store.</p>
 
             <pre><code class="javascript">
    Unno.module('app', ['$react', 'App'], function(React, App) {
@@ -88,17 +91,18 @@
    });
             </code></pre>
 
-            <p>As you can see, we've created a module named <strong>app</strong> with two dependencies.
-               The first one is React itself and the second is <em>App</em> main component. After that we use
-               React to render the component into the page. The React runtime is handled as a special component
-               that can be injected into any module as you need. We'll talk about Addons further.</p>
+            <p>As we can see, we've created a module called <em class="code">app</em> with two dependencies.
+               The first one is React itself and the second one is <em class="code">App</em> component.
+               After that we use React to render the component into the page. The React runtime is handled as
+               a special component that can be injected into any other module do you want.
+               We'll talk about Addons more further.</p>
          </section>
 
          <section class="topic">
             <h3>Components</h3>
-            <p>Components are the core of Unno toolkit and we use React to build all components. If you dont
+            <p>Components are the core of Unno's toolkit and we use React to build all components. If you dont
                know how React works, please take a look at <a href="http://facebook.github.io/react" target="_react">React</a> project page.
-               Unno allow us create component without to worry about low-level details of React. You just need create a
+               Unno allow us create components without to worry about low-level React API details. We need just create a
                literal object and return it, no need to use React.createClass or React.createElement in your component code.</p>
 
             <pre><code class="javascript">
@@ -117,9 +121,9 @@
    });
             </code></pre>
             <p>
-            We've made a simple component named <strong>App</strong> and this component depends on <strong>$dom</strong>.
-            The <strong>$dom</strong> dependency is an alias to React.DOM. Our application component just renders a <em>div</em> element
-            into the page. In this example we are using no-JSX syntax.
+            We've made a simple component named <em class="code">App</em> and this component depends on <em class="code">$dom</em>.
+            The <em class="code">$dom</em> dependency is an alias to React.DOM. Our application component just renders a
+            <em class="code">div</em> element. In this example we are using no-JSX syntax.
             </p>
          </section>
 
@@ -147,10 +151,10 @@
             </code></pre>
 
             <p>
-            In this example, we've created a Stored named <strong>SimpleStore</strong>.
-            This Store has a method <em>add</em> that add some item object. After some change happens in Store
-            we call the <em>notify</em> method. This method notifies all components that are listen
-            to <em>SimpleStoreChange</em> event. Here is other convention of Unno, the pattern adopted to event name is:
+            In this example, we've created a Store named <em class="code">SimpleStore</em>.
+            This Store has a method <em class="code">add</em> that add some item object. After Store change
+            we call the <em class="code">notify</em> method. This method notifies all components that are listen
+            to <em class="code">SimpleStoreChange</em> event. Here is other Unno's convention, the pattern adopted to event name is:
             Store's name + Change suffix. In our case the event name is 'SimpleStoreChange'.
             </p>
             <p>
@@ -203,14 +207,14 @@
             <p>
             This component code is a little bit more complex the last one. In this component we're using the Unno API
             to work with events and trigger Store's method dynamically. We're using the lifecyle methods from React API,
-            such as <em>componentWillMount</em> to register the event listener and <em>componentWillUnmount</em> to remove
+            such as <em class="code">componentWillMount</em> to register the event listener and <em>componentWillUnmount</em> to remove
             the event listener.
             </p>
             <p>
-            If you notice, the <em>Simple</em> component has no dependency to <em>SimpleStore</em>. The Unno's event
-            subsystem handle all complexity for us. In this case, when user click on button, Unno invoke <em>add</em>
-            method from <em>SimpleStore</em> passing an object as parameter. The store add this item and notifies all
-            components that are listen to. We've registered <em>handleAddEvent</em> method from component as a listener.
+            If you notice, the <em class="code">Simple</em> component has no dependency to <em class="code">SimpleStore</em>. The Unno's event
+            subsystem handle all complexity for us. In this case, when user click on button, Unno invoke <em class="code">add</em>
+            method from <em class="code">SimpleStore</em> passing an object as parameter. The store add this item and notifies all
+            components that are listen to. We've registered <em class="code">handleAddEvent</em> method from component as a listener.
             </p>
             <p>
             The method listener has a signature convention as well. We've used the NodeJS error handling convention, where the
@@ -220,7 +224,7 @@
 
          <section class="topic">
             <h3>Addons</h3>
-            <p>Unno provides you extensions, called Addons. Many those are from React core itself.
+            <p>Unno provides us extensions, called Addons. Many those are from React core itself.
             Each addon has its own alias, prefixed with '$' sign. Some have been already used in our examples, eg. $react and $dom.
             Here are a list of all addons avaiable in Unno's runtime.
             </p>
