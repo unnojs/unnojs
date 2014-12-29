@@ -319,7 +319,8 @@
          instance = this.stores[meta[0]];
          if (instance) {
             callback = instance[meta[1]];
-            if (data) { callback.call(instance, data); }
+            if (typeof data === 'boolean') { callback.call(instance, data); }
+            else if (data) { callback.call(instance, data); }
             else { callback.call(instance); }
          } else {
             console.warn(meta[0]+' store object could not be found.');
