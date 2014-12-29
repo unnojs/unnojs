@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="1" />
+    <meta name="description" content="UnnoJS : Simple Toolkit for Modern Web Application">
+    <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/default.min.css">
+    <title>UnnoJS</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+           <a id="flag_banner_en" href="http://unnojs.github.io/unnojs">English</a>
+           <a id="forkme_banner" href="https://github.com/unnojs/unnojs">GitHub</a>
+
+          <h1 id="project_title">
+             <div class="logo">
+                <div class="logo_icon"><img src="../images/unno_small.png"></img></div>
+                <div class="logo_name">NNO</div>
+                <div class="logo_sufix">JS</div>
+             </div>
+          </h1>
+          <div class="clear"></div>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/unnojs/unnojs/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/unnojs/unnojs/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+         <p>&nbsp;</p>
+         <div class="subtitle">
+            <h3>Toolkit Simples para Construção de Aplicações Web Modernas</h3>
+         </div>
+
+         <p>&nbsp;</p>
+         <div class="clear"></div>
+         <div>
+            <div class="column">
+               <h3>Objetivo</h3>
+               <p>Construir um toolkit para trabalhar com a biblioteca React e outras extensões
+                  (DI, Router, LocalStorage, etc) integradas. Dessa forma simplificando o desenvolvimento Web
+                  baseado em componentes e integrados com um mecanismo de fluxo de dados (Flux).</p>
+            </div>
+
+            <div class="column">
+               <h3>Porquê?</h3>
+               <p>Porque nós gostariamos de oferecer um toolkit completo que nos ajudaria no desenvolvimento de
+                  aplicações Web com UI reativas, enquanto que não queriamos nos preocupar com os detalhes de integração
+                  e expor também uma API simples para os desenvolvedores.</p>
+            </div>
+
+            <div class="column">
+               <h3>Contribua</h3>
+               <p>Nós pedimos para comunidade nos enviar feedback, reportar bugs, compartilhar suas experiências e ajude-nos com sugestões para melhoria e crescimento do projeto.</p>
+            </div>
+         </div>
+         <div class="clear"></div>
+         <p>&nbsp;</p>
+
+         <div class="subtitle">
+            <h3>Unno é apenas o que você precisa para construir aplicações Web componentizadas e escaláveis.</h3>
+         </div>
+         <p>&nbsp;</p>
+
+         <section class="topic">
+            <h3>Getting Started</h3>
+            <p>Você pode instalar o Unno via <em class="code">bower</em> para começar.</p>
+            <pre><code>
+   $ bower install unno
+            </code></pre>
+            <br/>
+         </section>
+
+         <p>&nbsp;</p>
+         <p>&nbsp;</p>
+         <div class="subtitle" style="text-align:left;">
+            <h3>Documentação</h3>
+         </div>
+
+         <section class="topic">
+            <h3>Modulos</h3>
+            <p>O ponto de entrada é <em class="code">module</em>. Você deve definir um ponto de entrada da sua aplicação e você pode
+               criar um módulo chamado <em class="code">main</em> ou <em class="code">app</em>. Unno irá trata-los como ponto de entrada,
+               isso é uma convenção do Unno.</p>
+            <pre><code class="javascript">
+   Unno.module('main', [/* deps */], function() {
+     // code here
+   });
+            </code></pre>
+            <p>Como você pode ver, a sintaxe do Unno foi inspirada no Requirejs. Para definir um módulo você deve informar
+               três parametros: o nome do módulo, array de dependências e a função de definição do módulo.
+               O módulo de entrada não precisa retornar nada, mas o demais módulos devem retornar um objeto,
+               que será injetado em outro módulo, componente ou store.</p>
+
+            <pre><code class="javascript">
+   Unno.module('app', ['$react', 'App'], function(React, App) {
+      React.render(App({}), document.getElementById('app'));
+   });
+            </code></pre>
+
+            <p>Como podemos ver, criamos um módulo chamado <em class="code">app</em> com duas dependências.
+               A primeira é o próprio React e a segunda é o componente principal <em class="code">App</em>. Após isso usamos o
+               React para renderizar o componente dentro da página. O runtime do React é tratado como um componente
+               especial que pode ser injetado em qualquer outro como você quiser. Nós falaremos sobre Addons mais a frente.</p>
+         </section>
+
+         <section class="topic">
+            <h3>Componentes</h3>
+            <p>Componentes são o núcleo do toolkit do Unno e nós usamos o React para construir todos os componentes. Caso você não
+               saiba como React funciona, por favor veja o link <a href="http://facebook.github.io/react" target="_react">React</a> da página do projeto.
+               Unno nos permite criar componentes sem nos preocuparmos com detalhes de baixo nível da API React. Você precisa apenas criar um
+               objeto literal e retorná-lo, não precisa usar React.createClass ou React.createElement no código do seu componente.</p>
+
+            <pre><code class="javascript">
+   Unno.component('App', ['$dom'], function(DOM) {
+      'use strict';
+
+      var div = DOM.div;
+
+      var App = {
+         render: function() {
+            return div({}, 'Application Component')
+         }
+      };
+
+      return App;
+   });
+            </code></pre>
+            <p>
+            Nós criamos um componente simples chamado <em class="code">App</em> e este componente depende do <em class="code">$dom</em>.
+            A dependência <em class="code">$dom</em> é um alias para React.DOM. Nosso componente de aplicação renderiza apenas um
+            elemento <em class="code">div</em> na página. Neste exemplo estamos usando a sintaxe sem JSX.
+            </p>
+         </section>
+
+         <section class="topic">
+            <h3>Stores</h3>
+            <p>O Store é responsável por manter dados entre componentes alem de compartilhá-los.
+            Cada método do Store pode ser disparado como um evento. De fato, esta funcionalidade é levemente
+            diferente de outras implementação do Flux, que usam uma Ação para invocar métodos do Store.
+            </p>
+
+            <pre><code class="javascript">
+   Unno.store('SimpleStore', [], function() {
+      'use strict';
+
+      var SimpleStore = {
+         add: function(item) {
+            var data = this.getData();
+            data.push(item);
+            this.setData(data);
+            this.notify();
+         }
+      };
+
+      return SimpleStore;
+   });
+            </code></pre>
+
+            <p>
+            Neste exemplo, criamos um Store chamado <em class="code">SimpleStore</em>.
+            Este Store possui um método <em class="code">add</em> que adiciona um objeto item. Após sofrer alguma mudança no Store
+            nós devemos chamar o método <em class="code">notify</em>. Este método notifica todos os componentes que estivem escutando
+            o evento <em class="code">SimpleStoreChange</em>. Aqui temos outra convenção do Unno, o padrão adotado para nome de evento é:
+            nome do Store + sufixo 'Change'. Em nosso caso o nome do evento é 'SimpleStoreChange'.
+            </p>
+            <p>
+            Para registrar um escutador do evento no componente, devemos fazer:
+            </p>
+
+            <pre><code class="javascript">
+   Unno.component('Simple', ['$dom'], function(DOM) {
+      'use strict';
+
+      var div = DOM.div,
+          span = DOM.span,
+          button = DOM.button;
+
+      var Simple = {
+         // trata o clique do botoa
+         handleClick: function(e) {
+            e.preventDefault();
+            // dispara o metodo como um evento, passando um objeto como parametro
+            Unno.trigger('SimpleStore.add', { id:1, name:'UnnoJS' });
+         },
+
+         // metodo que sera chamado após a notificacao do Store
+         handleAddEvent: function(err, data) {
+            if (err) return;
+            console.log(data);
+         },
+
+         // registra o escutador do evento para 'SimpleStoreChange'
+         componentWillMount: function() {
+            this.simpleEventAdd = Unno.listen('SimpleStoreChange', this.handleAddEvent);
+         },
+
+         // desregistra o escutador do evento
+         componentWillUnmount: function() {
+            Unno.unlisten(this.simpleEventAdd);
+         },
+
+         render: function() {
+            return div({},
+               span({}, 'Simple Component'),
+               button({ type:'button', onClick: this.handleClick }, 'Click Me!')
+            )
+         }
+      };
+
+      return Simple;
+   });
+            </code></pre>
+            <p>
+            Este código de componente é um pouco mais complexo que o último. Neste componente usamos a API do Unno
+            para trabalhar com evento e disparar métodos do Store dinamicamente. Nós usamos métodos do ciclo de vida da API React,
+            tais como <em class="code">componentWillMount</em> para registrar o escutador do evento e <em class="code">componentWillUnmount</em> para remover
+            o escutador do evento.
+            </p>
+            <p>
+            Se você notar, o componente <em class="code">Simple</em> não possui nenhuma dependência com o <em class="code">SimpleStore</em>.
+            O subsistema de eventos do Unno trata toda complexidade para nós. Neste caso, quando o usuário clica no botão,
+            o Unno invoca o método <em class="code">add</em> do <em class="code">SimpleStore</em> passando um objeto como parâmetro.
+            O Store adiciona este item e notifica todos os componente que estão escutando. Nós registramos o método
+            <em class="code">handleAddEvent</em> do componente como um escutador.
+            </p>
+            <p>
+            O método escutador possui uma convenção de assinatura também. Nós usamos a convenção de tratamento de erro do NodeJS,
+            onde o primeiro parâmetro é sempre um objeto de erro (se houver ou null) e o segundo parâmetro é o dado do Store.
+            </p>
+         </section>
+
+         <section class="topic">
+            <h3>Addons</h3>
+            <p>Unno fornece a você extensões, chamadas de Addons. Muitas dessas extensões são do core do próprio React.
+            Cada addon possui seu próprio alias, prefixado com símbolo '$'. Algumas já foram usadas em nossos exemplos, ex. $react e $dom.
+            Aqui está uma lista de todos os addons disponíveis no runtime do Unno.
+            </p>
+            <pre><code class="jquery">
+   $react: biblioteca React
+   $dom: Apenas um alias para React.DOM
+   $storage: Uma abstração para trabalhar com a API LocalStorage
+   $addons: Apenas alias para addons nativo do React
+   $router: O componente ReactRouter ja empacotado.
+            </code></pre>
+
+            <p>Por favor veja os exemplos para maiores detalhes.</p>
+         </section>
+
+         <section class="topic">
+            <h3>Utilities</h3>
+            <p>Unno não possui dependência externa e ele fornece algumas funções utilitárias que
+               podemos usar em nosso código. O namespace interno <em class="code">util</em> fornece:</p>
+            <pre><code class="jquery">
+   Unno.util.each(lista, callback)
+      Utiliza o 'callback' para iterar sobre a 'lista'.
+
+   Unno.util.merge(from, target)
+      Copia as propriedades do objeto 'from' para o objeto 'target'.
+
+   Unno.util.isNull(value)
+      Retorna true se o 'value' é nulo ou false caso contrário.
+
+   Unno.util.isObject(value)
+      Retorna true se o 'value' é um objeto ou false caso contrário.
+
+   Unno.util.isArray(value)
+      Retorna true se 'value' é um array ou false caso contrário.
+
+   Unno.util.isFunction(value)
+      Retorna true se 'value' é uma função ou false caso contrário.
+            </code></pre>
+
+            <p>&nbsp;</p>
+         </section>
+         <p>&nbsp;</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">2014 &copy; <a href="https://github.com/unnojs">UnnoJS</a> Team</p>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../javascripts/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>

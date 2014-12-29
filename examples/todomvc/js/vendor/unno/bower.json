@@ -1,0 +1,19 @@
+{
+   "name": "unno",
+   "version": "1.0.0",
+   "main": "build/unno.min.js",
+   "ignore": [
+      "**/.*",
+      "node_modules",
+      "bower_components",
+      "examples",
+      "gulpfile.js",
+      "package.json"
+   ],
+   "keywords": [
+      "unno",
+      "react",
+      "router",
+      "toolkit"
+   ]
+}

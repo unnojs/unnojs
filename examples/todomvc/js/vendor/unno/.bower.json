@@ -1,0 +1,30 @@
+{
+  "name": "unno",
+  "version": "1.0.0",
+  "main": "build/unno.min.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "examples",
+    "gulpfile.js",
+    "package.json"
+  ],
+  "keywords": [
+    "unno",
+    "react",
+    "router",
+    "toolkit"
+  ],
+  "homepage": "https://github.com/unnojs/unnojs",
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "ac3f0ad55a834967f6c7654091f5c8a3e7348215"
+  },
+  "_source": "git://github.com/unnojs/unnojs.git",
+  "_target": "~1.0.0",
+  "_originalSource": "unno",
+  "_direct": true
+}
