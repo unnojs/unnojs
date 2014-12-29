@@ -32,8 +32,7 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
         complete: function(id) {
             var todos = JSON.parse(storage.get('todos'));
             todos.forEach(function(todo) {
-                var completed = todo.active;
-                if (todo.id === id) todo.active = !completed;
+                if (todo.id === id) todo.completed = !todo.completed;
             });
 
             this.updateList(todos);
@@ -42,11 +41,22 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
 
         add: function(item) {
             var todos = JSON.parse(storage.get('todos'));
-
             item.id = this.newId();
             todos.push(item);
             this.updateList(todos);
             this.getTodos();
+        },
+
+        toggleAll: function(value) {
+            console.log(value);
+            var todos = JSON.parse(storage.get('todos'));
+            todos = todos.map(function(item) {
+                item.completed = value;
+                return item;
+            });
+            console.log(todos);
+            //this.updateList(todos);
+            //this.getTodos();
         },
 
         remove: function(id) {
@@ -68,7 +78,7 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
                 filtered = [], index = -1;
 
             filtered = todos.filter(function(item, idx) {
-                return (item.active == false);
+                return (item.completed == true);
             });
 
             filtered.forEach(function(item) {

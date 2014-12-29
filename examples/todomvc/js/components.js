@@ -17,7 +17,7 @@
 				if (e.keyCode == 13) {
 					val = this.state.text;
 					if (val) {
-						item = { id:'', active:true, text: val };
+						item = { id:'', completed:false, title: val };
 						Unno.trigger('TodoStore.add', item);
 						this.setState({ text:'' });
 					}
@@ -57,6 +57,12 @@
 				this.setState({ count: data.length, todos: data });
 			},
 
+			onToggleAll: function(e) {
+				e.stopPropagation();
+				console.log(!!e.target.checked);
+				Unno.trigger('TodoStore.toggleAll', !!e.target.checked);
+			},
+
 			componentWillMount: function() {
 				this.storeEventId = Unno.listen('TodoStoreChange', this.handleStore);
 			},
@@ -73,7 +79,7 @@
 				});
 
 				return section({ id:'main', style: _style },
-					input({ id:'toggle-all', type:'checkbox' }),
+					input({ id:'toggle-all', type:'checkbox', onChange: this.onToggleAll }),
 					label({ htmlFor:'toggle-all' }, 'Mark all as complete'),
 					ul({ id:'todo-list' }, items)
 				)
@@ -106,10 +112,10 @@
 
 			render: function() {
 				var item = this.props.todo;
-				return li({ className: (item.active ? '' : 'completed') },
+				return li({ className: (item.completed ? 'completed' : '') },
 					div({ className:'view' },
-						input({ 'data-id': item.id, className: 'toggle', type:'checkbox', checked:!item.active, onChange: this.onChange }),
-						label(null, item.text),
+						input({ 'data-id': item.id, className: 'toggle', type:'checkbox', checked:item.completed, onChange: this.onChange }),
+						label(null, item.title),
 						button({ 'data-id': item.id, className: 'destroy', onClick: this.onClick })
 					),
 					input({ className:'edit' })
@@ -139,7 +145,7 @@
 			handleStore: function(err, data) {
 				if (err) { return; }
 				var _left = data.filter(function(item) {
-					if (item.active) return item;
+					if (!item.completed) return item;
 				});
 				this.setState({ count: data.length, left: _left.length });
 			},
@@ -182,10 +188,7 @@
 
 	// todo application
 	Unno.component('TodoApp', [
-		'$dom',
-		'TodoHeader',
-		'TodoList',
-		'TodoFooter'
+		'$dom', 'TodoHeader', 'TodoList', 'TodoFooter'
 	], function(DOM, TodoHeader, TodoList, TodoFooter) {
 		'use strict';
 
