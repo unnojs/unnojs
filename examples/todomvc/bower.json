@@ -1,0 +1,8 @@
+{
+  "name": "unno-todomvc",
+  "version": "1.0.0",
+  "dependencies": {
+    "todomvc-common": "~0.1.4",
+    "unno": "~1.0.0"
+  }
+}
