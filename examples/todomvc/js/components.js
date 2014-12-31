@@ -59,7 +59,6 @@
 
 			onToggleAll: function(e) {
 				e.stopPropagation();
-				console.log(!!e.target.checked);
 				Unno.trigger('TodoStore.toggleAll', !!e.target.checked);
 			},
 
@@ -127,7 +126,7 @@
 	});
 
 	// todo footer component
-	Unno.component('TodoFooter', ['$dom'], function(DOM) {
+	Unno.component('TodoFooter', ['$addons', '$dom'], function(Addons, DOM) {
 		'use strict';
 
 		var footer = DOM.footer, span = DOM.span,
@@ -135,8 +134,11 @@
 			 ul = DOM.ul, li = DOM.li, a = DOM.a;
 
 		var TodoFooter = {
+			mixins: [Addons.ChangeStatePropertyMixin],
+
 			getInitialState: function() {
 				return {
+					filter:'all',
 					count: 0,
 					left: 0
 				};
@@ -152,7 +154,7 @@
 
 			onClickClear: function(e) {
 				e.preventDefault();
-				Unno.trigger('TodoStore.clear');
+				Unno.trigger('TodoStore.clear', this.state.filter);
 			},
 
 			componentWillMount: function() {
@@ -163,10 +165,18 @@
 				Unno.unlisten(this.storeEventId);
 			},
 
+			onFilter: function(e) {
+				var filter = e.target.attributes['data-filter'].value;
+				this.changeState('filter', filter);
+				Unno.trigger('TodoStore.getTodos', filter);
+			},
+
 			render: function() {
+
 				var _style = { 'display': (this.state.count < 1 ? 'none':'') },
-				    completed = (this.state.count - this.state.left),
-					text = (this.state.left > 1 ? ' items left' : ' item left');
+				   completed = (this.state.count - this.state.left),
+					text = (this.state.left > 1 ? ' items left' : ' item left'),
+					filter = this.state.filter;
 
 				return footer({ id:'footer', style: _style },
 					span({ id:'todo-count'},
@@ -174,9 +184,9 @@
 						text
 					),
 					ul({ id: 'filters' },
-						li(null, a({ className:'selected', href:'#/' }, 'All')),
-						li(null, a({ href:'#/active' }, 'Active')),
-						li(null, a({ href:'#/completed' }, 'Completed'))
+						li(null, a({ className:(filter ==='all' ? 'selected':''), href:'#', 'data-filter':'all', onClick: this.onFilter }, 'All ')),
+						li(null, a({ className:(filter ==='active' ? 'selected':''), href:'#', 'data-filter':'active', onClick: this.onFilter }, ' Active ')),
+						li(null, a({ className:(filter ==='completed' ? 'selected':''), href:'#', 'data-filter':'completed', onClick: this.onFilter }, ' Completed'))
 					),
 					button({ id:'clear-completed', onClick: this.onClickClear }, 'Clear completed ('+ completed +')')
 				)
@@ -195,9 +205,8 @@
 		var section = DOM.section;
 
 		var TodoApp = {
-
 			componentDidMount: function() {
-				Unno.trigger('TodoStore.getTodos');
+				Unno.trigger('TodoStore.getTodos', 'all');
 			},
 
 			render: function() {

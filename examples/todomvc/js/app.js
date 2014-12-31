@@ -1,3 +1,3 @@
-Unno.module('app', ['$react', 'TodoApp'], function(React, TodoApp) {
-  React.render(TodoApp({}), document.getElementById('app'));
+Unno.module('app', ['$react', '$router', 'TodoApp'], function(React, Router, TodoApp) {
+   React.render(TodoApp({}), document.getElementById('app'));
 });

@@ -1,1 +1,4 @@
 /* base.css overrides */
+#filters li a.active {
+	font-weight: bold;
+}

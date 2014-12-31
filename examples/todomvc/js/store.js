@@ -1,11 +1,11 @@
 Unno.store('TodoStore', ['$storage'], function(storage) {
-   'use strict';
+    'use strict';
 
-    function S4() {
+     function S4() {
         return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    }
+     }
 
-    var TodoStore = {
+     var TodoStore = {
         url:'',
 
         init: function() {
@@ -20,14 +20,25 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             return (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
         },
 
-        updateList: function(collection) {
+         updateList: function(collection) {
             storage.add('todos', JSON.stringify(collection));
-        },
+         },
 
-        getTodos: function() {
-            this.setData(JSON.parse(storage.get('todos')));
-            this.notify();
-        },
+         getTodos: function(param) {
+             var todos = JSON.parse(storage.get('todos'));
+             if (param === 'all') {
+                this.setData(todos);
+             } else if (param === 'active') {
+                this.setData(todos.filter(function(item) {
+                   return (item.completed == false);
+                }));
+             } else {
+                this.setData(todos.filter(function(item) {
+                   return (item.completed == true);
+                }));
+             }
+             this.notify();
+         },
 
         complete: function(id) {
             var todos = JSON.parse(storage.get('todos'));
@@ -36,7 +47,7 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             });
 
             this.updateList(todos);
-            this.getTodos();
+            this.getTodos('all');
         },
 
         add: function(item) {
@@ -44,19 +55,17 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             item.id = this.newId();
             todos.push(item);
             this.updateList(todos);
-            this.getTodos();
+            this.getTodos('all');
         },
 
         toggleAll: function(value) {
-            console.log(value);
             var todos = JSON.parse(storage.get('todos'));
             todos = todos.map(function(item) {
                 item.completed = value;
                 return item;
             });
-            console.log(todos);
-            //this.updateList(todos);
-            //this.getTodos();
+            this.updateList(todos);
+            this.getTodos('all');
         },
 
         remove: function(id) {
@@ -70,36 +79,17 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             if (index == -1) return;
             todos.splice(index, 1);
             this.updateList(todos);
-            this.getTodos();
+            this.getTodos('all');
         },
 
-        clear: function() {
-            var todos = JSON.parse(storage.get('todos')),
-                filtered = [], index = -1;
-
-            filtered = todos.filter(function(item, idx) {
-                return (item.completed == true);
+        clear: function(filter) {
+            var todos = JSON.parse(storage.get('todos'));
+            todos = todos.filter(function(item, idx) {
+                return (item.completed == false);
             });
-
-            filtered.forEach(function(item) {
-                index = -1;
-                todos.forEach(function(todo, idx) {
-                    if (todo.id === item.id) {
-                        index = idx;
-                        return;
-                    }
-                });
-
-                if (index > -1) {
-                    todos.splice(index, 1);
-                }
-            });
-
             this.updateList(todos);
-            this.getTodos();
+            this.getTodos(filter);
         }
-
     };
-
     return TodoStore;
 });
