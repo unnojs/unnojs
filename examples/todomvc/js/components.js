@@ -1,65 +1,133 @@
-	// todo header component
-	Unno.component('TodoHeader', ['$dom', '$addons'], function(DOM, Addons) {
-		'use strict';
+// todo header component
+Unno.component('TodoHeader', ['$dom', '$addons'], function(DOM, Addons) {
+	'use strict';
 
-		var header = DOM.header,
-			 input = DOM.input;
+	var TodoHeader = {
+		mixins: [Addons.LinkedStateMixin],
 
-		var TodoHeader = {
-			mixins: [Addons.LinkedStateMixin],
+		getInitialState: function() {
+			return { text:'' };
+		},
 
-			getInitialState: function() {
-				return { text:'' };
-			},
-
-			onKeyDown: function(e) {
-				var val = '', item = {};
-				if (e.keyCode == 13) {
-					val = this.state.text;
-					if (val) {
-						item = { id:'', completed:false, title: val };
-						Unno.trigger('TodoStore.add', item);
-						this.setState({ text:'' });
-					}
+		onKeyDown: function(e) {
+			var val = '', item = {};
+			if (e.keyCode == 13) {
+				val = this.state.text;
+				if (val) {
+					item = { id:'', completed:false, title: val };
+					Unno.trigger('TodoStore.add', item);
+					this.setState({ text:'' });
 				}
-			},
-
-			render: function() {
-				return header({},
-					DOM.h1(null, 'todos'),
-					input({ id:'new-todo',
-						type:'text',
-						placeholder:'What needs to be done?',
-						autoFocus:true,
-						valueLink: this.linkState('text'),
-						onKeyDown: this.onKeyDown })
-				)
 			}
-		};
+		},
 
-		return TodoHeader;
-	});
+		render: function() {
+			return DOM.header({},
+				DOM.h1(null, 'todos'),
+				DOM.input({ id:'new-todo',
+					type:'text',
+					placeholder:'What needs to be done?',
+					autoFocus:true,
+					valueLink: this.linkState('text'),
+					onKeyDown: this.onKeyDown })
+			)
+		}
+	};
+
+	return TodoHeader;
+});
+
+// todo item component
+Unno.component('TodoItem', ['$dom', '$addons'], function(DOM, Addons) {
+	'use strict';
+
+	var div = DOM.div, input = DOM.input,
+		 li = DOM.li, label = DOM.label,
+		 button = DOM.button;
+
+	var TodoItem = {
+		mixins: [Addons.LinkedStateMixin, Addons.ChangeStatePropertyMixin],
+
+		getInitialState: function() {
+			return { text:'', edit:false, completed:this.props.todo.completed };
+		},
+
+		onChange: function(e) {
+			e.stopPropagation();
+			var id = e.target.getAttribute('data-id');
+			Unno.trigger('TodoStore.complete', id);
+		},
+
+		onRemove: function(e) {
+			e.preventDefault();
+			var id = e.target.getAttribute('data-id');
+			Unno.trigger('TodoStore.remove', id);
+		},
+
+		onEdit: function(e) {
+			e.preventDefault();
+			if (this.state.completed) return;
+			this.setState({ text: e.target.innerText, edit: true });
+		},
+
+		onKeyDown: function(e) {
+			var val = '', item = {}, _id = '';
+			if (e.keyCode == 13) {
+				_id = e.target.getAttribute('data-id');
+				val = this.state.text;
+				if (val) {
+					item = { id: _id, completed:false, title: val };
+					Unno.trigger('TodoStore.update', item);
+					this.setState({ text:'', edit:false });
+				}
+			} else if (e.keyCode == 27) {
+				this.setState({ text:'', edit:false });
+			}
+		},
+
+		render: function() {
+			var item = this.props.todo,
+				 _class = (item.completed ? 'completed' : '');
+
+			if (this.state.edit)	_class += ' editing';
+
+			return li({ className: _class },
+				div({ className:'view' },
+					input({ 'data-id': item.id, className: 'toggle', type:'checkbox', checked:item.completed, onChange: this.onChange }),
+					label({ onDoubleClick: this.onEdit }, item.title),
+					button({ 'data-id': item.id, className: 'destroy', onClick: this.onRemove })
+				),
+				input({ 'data-id': item.id, className:'edit', onKeyDown: this.onKeyDown, valueLink: this.linkState('text') })
+			)
+		}
+	};
+
+	return TodoItem;
+});
 
 	// todo list component
-	Unno.component('TodoList', ['$dom', 'TodoItem'], function(DOM, Todo) {
+	Unno.component('TodoList', ['$dom', '$addons'], function(DOM, Addons) {
 		'use strict';
 
 		var section = DOM.section, ul = DOM.ul,
-		    input = DOM.input, label = DOM.label
+		    input = DOM.input,
+			 label = DOM.label,
+			 TodoItem = Unno.component('TodoItem');
 
 		var TodoList = {
+
 			getInitialState: function() {
-				return { count: 0, todos: [] };
+				return { count: 0, data: [], edit:false };
 			},
 
-			handleStore: function(err, data) {
+			handleStore: function(err, state) {
 				if (err) { return; }
-				this.setState({ count: data.length, todos: data });
+				this.setState(state);
 			},
 
 			onToggleAll: function(e) {
 				e.stopPropagation();
-				Unno.trigger('TodoStore.toggleAll', !!e.target.checked);
+				Unno.trigger('TodoStore.toggleAll', e.target.checked);
 			},
 
 			componentWillMount: function() {
@@ -73,9 +141,9 @@
 			render: function() {
 				var _style = { 'display': (this.state.count < 1 ? 'none':'') };
 
-				var items = this.state.todos.map(function(item, idx) {
-					return Todo({ key: idx, todo: item })
-				});
+				var items = this.state.data.map(function(item, idx) {
+					return TodoItem({ key: idx, todo: item });
+				}.bind(this));
 
 				return section({ id:'main', style: _style },
 					input({ id:'toggle-all', type:'checkbox', onChange: this.onToggleAll }),
@@ -86,43 +154,6 @@
 		};
 
 		return TodoList;
-	});
-
-	// todo item component
-	Unno.component('TodoItem', ['$dom'], function(DOM) {
-		'use strict';
-
-		var div = DOM.div, input = DOM.input,
-			 li = DOM.li, label = DOM.label,
-			 button = DOM.button;
-
-		var TodoItem = {
-			onChange: function(e) {
-				e.stopPropagation();
-				var id = e.target.getAttribute('data-id');
-				Unno.trigger('TodoStore.complete', id);
-			},
-
-			onClick: function(e) {
-				e.preventDefault();
-				var id = e.target.getAttribute('data-id');
-				Unno.trigger('TodoStore.remove', id);
-			},
-
-			render: function() {
-				var item = this.props.todo;
-				return li({ className: (item.completed ? 'completed' : '') },
-					div({ className:'view' },
-						input({ 'data-id': item.id, className: 'toggle', type:'checkbox', checked:item.completed, onChange: this.onChange }),
-						label(null, item.title),
-						button({ 'data-id': item.id, className: 'destroy', onClick: this.onClick })
-					),
-					input({ className:'edit' })
-				)
-			}
-		};
-
-		return TodoItem;
 	});
 
 	// todo footer component
@@ -144,12 +175,14 @@
 				};
 			},
 
-			handleStore: function(err, data) {
+			handleStore: function(err, state) {
 				if (err) { return; }
-				var _left = data.filter(function(item) {
-					if (!item.completed) return item;
+				var left = 0;
+				state.data.forEach(function(item) {
+					if (item.completed == false) left++;
 				});
-				this.setState({ count: data.length, left: _left.length });
+				state.left = left;
+				this.setState(state);
 			},
 
 			onClickClear: function(e) {
@@ -168,11 +201,10 @@
 			onFilter: function(e) {
 				var filter = e.target.attributes['data-filter'].value;
 				this.changeState('filter', filter);
-				Unno.trigger('TodoStore.getTodos', filter);
+				Unno.trigger('TodoStore.filter', filter);
 			},
 
 			render: function() {
-
 				var _style = { 'display': (this.state.count < 1 ? 'none':'') },
 				   completed = (this.state.count - this.state.left),
 					text = (this.state.left > 1 ? ' items left' : ' item left'),
@@ -197,12 +229,13 @@
 	});
 
 	// todo application
-	Unno.component('TodoApp', [
-		'$dom', 'TodoHeader', 'TodoList', 'TodoFooter'
-	], function(DOM, TodoHeader, TodoList, TodoFooter) {
+	Unno.component('TodoApp', ['$dom'], function(DOM) {
 		'use strict';
 
-		var section = DOM.section;
+		var section = DOM.section,
+			 TodoHeader = Unno.component('TodoHeader'),
+			 TodoList = Unno.component('TodoList'),
+			 TodoFooter = Unno.component('TodoFooter');
 
 		var TodoApp = {
 			componentDidMount: function() {

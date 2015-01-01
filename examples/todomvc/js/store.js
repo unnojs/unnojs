@@ -13,6 +13,7 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             if (!todos) {
                 todos = [];
                 storage.add('todos', JSON.stringify(todos));
+                storage.add('todo.filter', 'all');
             }
         },
 
@@ -24,19 +25,24 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             storage.add('todos', JSON.stringify(collection));
          },
 
-         getTodos: function(param) {
-             var todos = JSON.parse(storage.get('todos'));
-             if (param === 'all') {
-                this.setData(todos);
-             } else if (param === 'active') {
-                this.setData(todos.filter(function(item) {
+         getTodos: function() {
+             var todos = JSON.parse(storage.get('todos')),
+                 _state = { count: todos.length, data:[] },
+                 filter = storage.get('todo.filter');
+
+             if (filter === 'all') {
+                _state.data = todos;
+             } else if (filter === 'active') {
+                _state.data = todos.filter(function(item) {
                    return (item.completed == false);
-                }));
+                });
              } else {
-                this.setData(todos.filter(function(item) {
+                _state.data = todos.filter(function(item) {
                    return (item.completed == true);
-                }));
+                });
              }
+             _state.filter = filter;
+             this.setData(_state);
              this.notify();
          },
 
@@ -47,16 +53,26 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             });
 
             this.updateList(todos);
-            this.getTodos('all');
+            this.getTodos();
         },
 
-        add: function(item) {
+         add: function(item) {
             var todos = JSON.parse(storage.get('todos'));
             item.id = this.newId();
             todos.push(item);
             this.updateList(todos);
-            this.getTodos('all');
-        },
+            this.getTodos();
+         },
+
+         update: function(item) {
+            var todos = JSON.parse(storage.get('todos'));
+            todos.forEach(function(todo) {
+               if (todo.id == item.id)
+                  todo.title = item.title;
+            });
+            this.updateList(todos);
+            this.getTodos();
+         },
 
         toggleAll: function(value) {
             var todos = JSON.parse(storage.get('todos'));
@@ -65,7 +81,7 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
                 return item;
             });
             this.updateList(todos);
-            this.getTodos('all');
+            this.getTodos();
         },
 
         remove: function(id) {
@@ -79,7 +95,12 @@ Unno.store('TodoStore', ['$storage'], function(storage) {
             if (index == -1) return;
             todos.splice(index, 1);
             this.updateList(todos);
-            this.getTodos('all');
+            this.getTodos();
+        },
+
+        filter: function(value) {
+           storage.add('todo.filter', value);
+           this.getTodos();
         },
 
         clear: function(filter) {

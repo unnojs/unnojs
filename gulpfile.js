@@ -8,7 +8,10 @@ var gulp   = require('gulp'),
 var deps = [
    './node_modules/react/dist/react-with-addons.js',
    './node_modules/react-router/dist/react-router.js',
-   './src/unno.js'
+   './src/unno.js',
+   './src/storage.js',
+   './src/dispatcher.js',
+   './src/store.js'
 ];
 
 gulp.task('clean', function() {
@@ -33,6 +36,6 @@ gulp.task('gzip', function() {
 gulp.task('default', ['clean','jshint'], function() {
    gulp.src(deps)
        .pipe(concat('unno.min.js'))
-       .pipe(uglify())
+      //  .pipe(uglify())
        .pipe(gulp.dest('./build'));
 });

@@ -1,3 +1,12 @@
+/*
+* unno.js: main file.
+* version: 1.1.0
+*
+* All rights reserved.
+*
+* (C) 2014, David Farias, Keuller Magalhaes
+* MIT LICENSE
+*/
 (function() {
    var isIE = /*@cc_on!@*/false || !!document.documentMode;
    if (!isIE) return;
@@ -29,124 +38,12 @@
       }
    }
 
-   function _merge(from, to) {
+   function _copy(from, to) {
      Object.keys(from).forEach(function(key) {
        if (to.prototype) { to.prototype[key] = from[key]; }
        else { to[key] = from[key]; }
      });
    }
-
-   /* -----------------------------------------------------------------------
-   * Local Storage
-   */
-   var Storage = function() {
-      this.hasStorage = (function() {
-         try {
-            return 'localStorage' in window && window.localStorage !== null;
-         } catch (e) { return false; }
-      })();
-   };
-
-   Storage.prototype = {
-      add: function(key, value) {
-         if (!this.hasStorage) throw new Error('LocalStorage does not supported.');
-         if (typeof value === 'string') {
-            window.localStorage.setItem(key, value);
-            return;
-         }
-         throw new Error('You cannot add this type on local storage. Key: ' + key);
-      },
-
-      get: function(key) {
-         if (!this.hasStorage) throw new Error('LocalStorage does not supported.');
-         return window.localStorage.getItem(key);
-      },
-
-      remove: function(key) {
-         window.localStorage.removeItem(key);
-      },
-
-      clear: function() {
-         if (!this.hasStorage) throw new Error('LocalStorage does not supported.');
-         window.localStorage.clear();
-      }
-   };
-
-   /* -----------------------------------------------------------------------
-   * Dispatcher
-   */
-   var Dispatcher = function() {
-      this._lastId = 0;
-      this._prefix = 'id_';
-      this._callbacks = Object.create({});
-      this._events = Object.create({});
-   };
-
-   Dispatcher.prototype = {
-      dispatch: function(eventName, err, payload) {
-         var events = this._events[eventName];
-         if (events) {
-            events.forEach(function(event) {
-               event.handler.apply(null, [err, payload]);
-            });
-         }
-      },
-
-      register: function(eventName, callback) {
-         var _id = (this._prefix + this._lastId++),
-         _events = this._events[eventName];
-         if (!isObject(_events)) { //there is events
-            _events = [];
-         }
-         _events.push({ id: _id, handler: callback });
-         this._events[eventName] = _events;
-         return _id;
-      },
-
-      unregister: function(id) {
-         var idx, _event, count, handler, pos;
-
-         if (id) {
-            Object.keys(this._events).forEach(function(key) {
-               _event = this._events[key];
-               handler = null;
-               pos = -1;
-               for (idx=0, count = _event.length; idx < count; idx++) {
-                  handler = _event[idx];
-                  if (handler.id === id) {
-                     pos = idx;
-                     break;
-                  }
-               }
-
-               if (pos >= 0) {
-                  _event.splice(pos, 1);
-                  this._events[key] = _event;
-               }
-            }.bind(this));
-         }
-      }
-
-   };
-   /* ------------------------[End Dispatcher]--------------------------- */
-
-   /* -----------------------------------------------------------------------
-   * Base Store implementation
-   */
-   function Store() {
-      this.data = null;
-      this.error = null;
-   }
-
-   Store.prototype = {
-      notify: function() {
-         Unno.notify(this.name, this.error, this.data);
-      },
-      setData: function(value) { this.data = value; },
-      getData: function() { return this.data; },
-      setError: function(err) { this.error = err; }
-   };
-   /*-------------------------[End Store]--------------------------------- */
 
    var ChangeStatePropertyMixin = {
       changeState: function(property, value) {
@@ -156,24 +53,18 @@
       }
    };
 
-   function scripts() { return document.getElementsByTagName('script'); }
-
-   function AppStore() {
-      Store.call(this);
-   }
-
-   global.Unno = {
-      VERSION: '1.0.0',
+   var Unno = {
+      VERSION: '1.1.0',
       util: {
          each: each,
-         merge: _merge,
+         merge: _copy,
+         copy: _copy,
          isNull: isNull,
          isObject: isObject,
          isArray: isArray,
          isFunction: isFunction
       },
       __queue__: {},
-      dispatcher: new Dispatcher(),
       services: {},
       modules: {},
       components: {},
@@ -235,6 +126,9 @@
 
       module: function(name, deps, constructor) {
          var validParams, dependencies = [];
+
+         if (arguments.length == 1) return this.modules[name];
+
          if (arguments.length < 3) {
             throw new Error(name+' module signature does not defined correctly.');
          }
@@ -246,6 +140,7 @@
          if (name === 'app' || name === 'main') {
             this.processQueue();
             dependencies = this.loadDependencies(deps);
+
             constructor.apply(null, dependencies);
          } else {
             dependencies = this.loadDependencies(deps);
@@ -256,6 +151,9 @@
 
       component: function(name, deps, obj) {
          var key, R = this.services.react, component, componentClass, dependencies = [];
+
+         if (arguments.length == 1) return this.components[name];
+
          if (arguments.length < 3) {
             throw new Error(name+' component signature does not defined correctly.');
          }
@@ -279,37 +177,6 @@
          component.displayName = name;
          componentClass = R.createClass(component);
          this.components[name] = R.createFactory(componentClass);
-      },
-
-      store: function(name, deps, obj) {
-         var storeDef, _store, dependencies;
-         if (arguments.length < 3) {
-            throw new Error(name+' store signature does not defined correctly.');
-         }
-
-         deps = deps || [];
-         try {
-            dependencies = this.loadDependencies(deps);
-         } catch (e) {
-            this.queue(name, { type:'store', dependencies: deps, value: obj, fail: e.depName });
-            return;
-         }
-
-         storeDef = obj.apply(null, dependencies);
-
-         _merge(storeDef, AppStore);
-         _merge(Store.prototype, AppStore);
-         _store = new AppStore();
-
-         if(_store.init) _store.init();
-         if(isNull(_store.name)) {
-            _store.name = name;
-         }
-         if(isNull(_store.url)) {
-            console.warn('You did not defined the property "url" for "'+name+'" store object.');
-            _store.url = '';
-         }
-         this.stores[name] = _store;
       },
 
       // dispara uma acao no sistema
@@ -351,9 +218,11 @@
    var _addons = React.addons;
    _addons.ChangeStatePropertyMixin = ChangeStatePropertyMixin;
 
-   Unno.services.storage = new Storage();
    Unno.services.react = React;
    Unno.services.addons = _addons;
    Unno.services.dom = React.DOM;
    Unno.services.router = ReactRouter;
+
+   global.Unno = Unno;
+   global.unno = Unno;
 })(window);
