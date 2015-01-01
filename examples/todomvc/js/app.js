@@ -1,4 +1,4 @@
-Unno.module('app', ['$react', '$router'], function(React, Router) {
+Unno.module('app', ['$react'], function(React) {
    'use strict';
 
    var TodoApp = Unno.component('TodoApp');

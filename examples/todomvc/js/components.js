@@ -185,7 +185,7 @@ Unno.component('TodoItem', ['$dom', '$addons'], function(DOM, Addons) {
 				this.setState(state);
 			},
 
-			onClickClear: function(e) {
+			onClear: function(e) {
 				e.preventDefault();
 				Unno.trigger('TodoStore.clear', this.state.filter);
 			},
@@ -220,7 +220,7 @@ Unno.component('TodoItem', ['$dom', '$addons'], function(DOM, Addons) {
 						li(null, a({ className:(filter ==='active' ? 'selected':''), href:'#', 'data-filter':'active', onClick: this.onFilter }, ' Active ')),
 						li(null, a({ className:(filter ==='completed' ? 'selected':''), href:'#', 'data-filter':'completed', onClick: this.onFilter }, ' Completed'))
 					),
-					button({ id:'clear-completed', onClick: this.onClickClear }, 'Clear completed ('+ completed +')')
+					button({ id:'clear-completed', onClick: this.onClear }, 'Clear completed ('+ completed +')')
 				)
 			}
 		};
@@ -228,28 +228,28 @@ Unno.component('TodoItem', ['$dom', '$addons'], function(DOM, Addons) {
 		return TodoFooter;
 	});
 
-	// todo application
-	Unno.component('TodoApp', ['$dom'], function(DOM) {
-		'use strict';
+// todo application
+Unno.component('TodoApp', ['$dom'], function(DOM) {
+	'use strict';
 
-		var section = DOM.section,
-			 TodoHeader = Unno.component('TodoHeader'),
-			 TodoList = Unno.component('TodoList'),
-			 TodoFooter = Unno.component('TodoFooter');
+	var section = DOM.section,
+		 TodoHeader = Unno.component('TodoHeader'),
+		 TodoList = Unno.component('TodoList'),
+		 TodoFooter = Unno.component('TodoFooter');
 
-		var TodoApp = {
-			componentDidMount: function() {
-				Unno.trigger('TodoStore.getTodos', 'all');
-			},
+	var TodoApp = {
+		componentDidMount: function() {
+			Unno.trigger('TodoStore.getTodos');
+		},
 
-			render: function() {
-				return section({ id: 'todoapp' },
-					TodoHeader({}),
-					TodoList({}),
-					TodoFooter({})
-				)
-			}
-		};
+		render: function() {
+			return section({ id: 'todoapp' },
+				TodoHeader({}),
+				TodoList({}),
+				TodoFooter({})
+			)
+		}
+	};
 
-		return TodoApp;
-	});
+	return TodoApp;
+});
