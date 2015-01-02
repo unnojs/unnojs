@@ -140,13 +140,11 @@
          if (name === 'app' || name === 'main') {
             this.processQueue();
             dependencies = this.loadDependencies(deps);
-
             constructor.apply(null, dependencies);
          } else {
             dependencies = this.loadDependencies(deps);
             this.modules[name] = constructor.apply(null, dependencies);
          }
-
       },
 
       component: function(name, deps, obj) {
@@ -174,9 +172,18 @@
          }
 
          component = obj.apply(null, dependencies);
-         component.displayName = name;
-         componentClass = R.createClass(component);
-         this.components[name] = R.createFactory(componentClass);
+
+         if (window.JSXTransformer) {
+            this.components[name] = R.createFactory(component);
+         } else {
+            component.displayName = name;
+            if (isObject(component)) {
+               componentClass = R.createClass(component);
+               this.components[name] = R.createFactory(componentClass);
+            } else if (isFunction(component)) {
+               this.components[name] = R.createFactory(component);
+            }
+         }
       },
 
       // dispara uma acao no sistema
