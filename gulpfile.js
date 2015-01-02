@@ -11,6 +11,7 @@ var deps = [
    './src/unno.js',
    './src/storage.js',
    './src/dispatcher.js',
+   './src/action.js',
    './src/store.js'
 ];
 

@@ -4,27 +4,38 @@
 (function (global, exports) {
 
 	function Store() {
+		this._handlers = [];
 		this.state = null;
-		this.error = null;
 	}
+
+	Store.prototype = {
+		notify: function() {
+			var handlers = this._handlers, self = this;
+			handlers.forEach(function(handler) {
+				handler.call(null, self.state);
+			});
+		},
+		on: function(handler) {
+			if (!unno.util.isFunction(handler)) return;
+			this._handlers.push(handler);
+		},
+		off: function(handler) {
+			var handlers = this._handlers;
+			this._handlers = handlers.filter(function(obj) {
+				return (obj !== handler);
+			});
+		},
+		setData: function(value) { this.state = value; }, // @deprecated, will be removed in 1.2.0
+		getData: function() { return this.state; }, // @deprecated, use getState
+		getState: function() { return this.state; }
+	};
 
 	function AppStore() {
 		Store.call(this);
 	}
 
-	Store.prototype = {
-		notify: function() {
-			unno.notify(this.name, this.error, this.state);
-		},
-		setData: function(value) { this.state = value; }, // @deprecated, use setState
-		getData: function() { return this.state; }, // @deprecated, use getState
-		setState: function(value) { this.state = value; },
-		getState: function() { return this.state; },
-		setError: function(err) { this.error = err; }
-	};
-
 	function store(name, deps, obj) {
-		var storeDef, _store, dependencies;
+		var storeDef, _store, dependencies, hasActionHandler = false;
 		// gets store object by name
 		if (arguments.length == 1) {
 			return this.stores[name];
@@ -53,10 +64,10 @@
 			_store.name = name;
 		}
 
-		if (this.util.isNull(_store.url)) {
-			console.warn('You did not defined property "url" for "'+name+'" store object.');
-			_store.url = '';
-		}
+		if (_store.binds)
+			hasActionHandler = true;
+
+		if (!hasActionHandler) console.warn(name + ' store did not define the [binds] property.');
 		this.stores[name] = _store;
 	}
 

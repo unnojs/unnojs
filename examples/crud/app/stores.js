@@ -44,10 +44,15 @@ Unno.store('ContactStore', ['$storage'], function(storage) {
 
       list: function() {
          var collection = this.getCollection();
-         this.setData(collection);
+         this.state = { data: collection };
          this.notify();
-      }
+      },
 
+      binds: {
+         'ADD_CONTACT': 'add',
+         'DEL_CONTACT': 'remove',
+         'GET_CONTACTS': 'list'
+      }
    };
 
    return ContactStore;

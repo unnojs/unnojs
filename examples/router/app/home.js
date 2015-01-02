@@ -4,19 +4,20 @@ Unno.component('Home', ['$dom', 'MyButton'], function(D, MyButton) {
    var Home = {
       handleClick: function(e) {
          e.stopPropagation();
-         Unno.trigger('SimpleStore.show');
+         Unno.trigger('SHOW');
       },
 
-      handleEvent: function() {
+      handleEvent: function(state) {
+         console.log(state);
          alert('SimpleStore event.');
       },
 
       componentWillMount: function() {
-         this.eventId = Unno.listen('SimpleStoreChange', this.handleEvent);
+          Unno.store('SimpleStore').on(this.handleEvent);
       },
 
       componentWillUnmount: function() {
-         Unno.unlisten(this.eventId);
+          Unno.store('SimpleStore').off(this.handleEvent);
       },
 
       render: function() {

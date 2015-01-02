@@ -1,3 +1,7 @@
+Unno.createActions({
+    'SHOW': 'SHOW_ACTION'
+});
+
 Unno.module('main', ['$react', '$router', 'Header', 'Home', 'About'],
 function(React, Router, Header, Home, About) {
    'use strict';

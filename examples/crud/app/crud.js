@@ -67,7 +67,7 @@ Unno.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
 
       handleSave: function(e) {
          e.stopPropagation();
-         Unno.trigger('ContactStore.add', this.state);
+         Unno.trigger('ADD', this.state);
          this.setState({ name:'', email:'' });
       },
 
@@ -108,7 +108,7 @@ Unno.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
 /**
  * Contact Table
  */
-Unno.component('ContactTable', ['$dom'], function(D) {
+unno.component('ContactTable', ['$dom'], function(D) {
 
    var TableHeader = [
       D.th({key:1, width:'25%'}, '#'),
@@ -123,29 +123,26 @@ Unno.component('ContactTable', ['$dom'], function(D) {
       },
 
       componentWillMount: function() {
-         this.eventId = Unno.listen('ContactStoreChange', this.handleUpdate)
+         unno.store('ContactStore').on(this.handleUpdate);
       },
 
       componentWillUnmount: function() {
-         Unno.unlisten(this.eventId);
+         unno.store('ContactStore').off(this.handleUpdate);
       },
 
       componentDidMount: function() {
-         Unno.trigger('ContactStore.list');
+         unno.trigger('GET');
       },
 
-      handleUpdate: function(err, list) {
-         if (err) {
-            console.log(err); return;
-         }
-         this.setState({ data: list });
+      handleUpdate: function(state) {
+         this.setState(state);
       },
 
       handleRemove: function(e) {
          e.stopPropagation();
          var val = e.target.getAttribute('data-id');
          if (confirm('Are you wish remove this contact ?')) {
-            Unno.trigger('ContactStore.remove', val);
+            unno.trigger('DEL', val);
          }
       },
 

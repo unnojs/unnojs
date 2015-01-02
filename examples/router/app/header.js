@@ -1,7 +1,7 @@
 Unno.component('Header', ['$react', '$dom', '$router'], function(React, D, Router) {
 
    var Header,
-       Linker = React.createFactory(Router.Link),
+       Link = React.createFactory(Router.Link),
        RouteHandler = React.createFactory(Router.RouteHandler);
 
    Header = {
@@ -13,8 +13,8 @@ Unno.component('Header', ['$react', '$dom', '$router'], function(React, D, Route
                      D.li({}, String.fromCharCode(160)),
                      D.li({}, D.img({ src:'../assets/img/unno_150.png', width:'45'})),
                      D.li({}, String.fromCharCode(160)),
-                     D.li({}, Linker({ to:'/' }, 'Home')),
-                     D.li({}, Linker({ to:'about'}, 'About'))
+                     D.li({}, Link({ to:'/' }, 'Home')),
+                     D.li({}, Link({ to:'about'}, 'About'))
                   )
                )
             ),

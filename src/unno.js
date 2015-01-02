@@ -66,6 +66,7 @@
       },
       __queue__: {},
       services: {},
+      actions: {},
       modules: {},
       components: {},
       imports: {},
@@ -91,7 +92,6 @@
             for (key in o) { delete this.__queue__[key]; }
             o='';
             for (key in this.__queue__) { o += key; }
-            console.log(o);
             throw new Error('Those dependencies were not found. ' + o.join(','));
          }
       },
@@ -140,13 +140,11 @@
          if (name === 'app' || name === 'main') {
             this.processQueue();
             dependencies = this.loadDependencies(deps);
-
             constructor.apply(null, dependencies);
          } else {
             dependencies = this.loadDependencies(deps);
             this.modules[name] = constructor.apply(null, dependencies);
          }
-
       },
 
       component: function(name, deps, obj) {
@@ -174,23 +172,17 @@
          }
 
          component = obj.apply(null, dependencies);
-         component.displayName = name;
-         componentClass = R.createClass(component);
-         this.components[name] = R.createFactory(componentClass);
-      },
 
-      // dispara uma acao no sistema
-      trigger: function(expr, data) {
-         var meta, instance, action, callback;
-         meta = expr.split('.');
-         instance = this.stores[meta[0]];
-         if (instance) {
-            callback = instance[meta[1]];
-            if (typeof data === 'boolean') { callback.call(instance, data); }
-            else if (data) { callback.call(instance, data); }
-            else { callback.call(instance); }
+         if (window.JSXTransformer) {
+            this.components[name] = R.createFactory(component);
          } else {
-            console.warn(meta[0]+' store object could not be found.');
+            component.displayName = name;
+            if (isObject(component)) {
+               componentClass = R.createClass(component);
+               this.components[name] = R.createFactory(componentClass);
+            } else if (isFunction(component)) {
+               this.components[name] = R.createFactory(component);
+            }
          }
       },
 

@@ -18,6 +18,20 @@
 			}
 		},
 
+		fire: function(payload) {
+			var _stores = unno.stores, funcName = '', _binds;
+
+			Object.keys(_stores).forEach(function(storeName) {
+				_store = _stores[storeName];
+				Object.keys(_store.binds).forEach(function(actionType) {
+					funcName = _store.binds[actionType];
+					if (actionType === payload.type) {
+						_store[funcName].call(_store, payload.source);
+					}
+				});
+			});
+		},
+
 		register: function(eventName, callback) {
 			var _id = (this._prefix + this._lastId++),
 				 _events = this._events[eventName];
