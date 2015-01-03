@@ -1,8 +1,8 @@
 /**
  * Application (entry point)
  */
-Unno.component('App', ['$dom', 'ContactTable', 'ContactForm', 'Footer'],
-function(D, table, form, footer) {
+Unno.component('App', ['$dom', 'ContactTable', 'ContactForm', 'ContactFooter'],
+function(D, ContactTable, ContactForm, ContactFooter) {
    'use strict';
 
    var div = D.div;
@@ -21,12 +21,12 @@ function(D, table, form, footer) {
                )
             ),
             div({className:'container', style:{'padding':'60px 0px 0px'}},
-               form({}),
+               ContactForm({}),
                D.hr({}),
-               table({})
+               ContactTable({})
             ),
             D.br({}),
-            footer({})
+            ContactFooter({})
          )
       }
    };
@@ -37,7 +37,7 @@ function(D, table, form, footer) {
 /**
  * Footer page component
  */
-Unno.component('Footer', ['$dom'], function(D) {
+Unno.component('ContactFooter', ['$dom'], function(D) {
 
    var Footer = {
       render: function() {
@@ -60,15 +60,40 @@ Unno.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
 
    var ContactForm = {
       getInitialState: function() {
-         return { name:'', email:'' };
+         return { name:'', email:'', isValid:true, invalidFields:[] };
       },
 
-      mixins: [addons.LinkedStateMixin],
+      mixins: [addons.LinkedStateMixin, addons.ChangeStatePropertyMixin],
+
+      validate: function() {
+         this.changeState('isValid', true);
+         this.changeState('invalidFields', []);
+
+         if (!this.state.name) {
+            this.changeState('isValid', false);
+            this.state.invalidFields.push('name');
+         }
+
+         if (!this.state.email) {
+            this.changeState('isValid', false);
+            this.state.invalidFields.push('email');
+         }
+      },
+
+      isInvalidField: function(name) {
+         var fields = this.state.invalidFields.filter(function(field) {
+            return (field === name);
+         });
+         return (fields.length > 0);
+      },
 
       handleSave: function(e) {
          e.stopPropagation();
-         Unno.trigger('ADD', this.state);
-         this.setState({ name:'', email:'' });
+         this.validate();
+         if (this.state.isValid) {
+            Unno.trigger('ADD', this.state);
+            this.setState({ name:'', email:'' });
+         }
       },
 
       handleCancel: function(e) {
@@ -77,15 +102,20 @@ Unno.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
       },
 
       render: function() {
+         var cx = addons.classSet, nameClasses, emailClasses;
+
+         nameClasses = cx({ 'form-group': true, 'has-error': this.isInvalidField('name') });
+         emailClasses = cx({ 'form-group': true, 'has-error': this.isInvalidField('email') });
+
          return D.form({className:'form-horizontal'},
             D.br({}),
-            div({className:'form-group'},
+            div({ className:nameClasses },
                label({ className:'col-sm-2 control-label'}, 'Name:'),
                div({className:'col-sm-10'},
                   input({ className:'form-control', type:'text', maxLength:'35', valueLink: this.linkState('name') })
                )
             ),
-            div({className:'form-group'},
+            div({ className:emailClasses },
                label({ className:'col-sm-2 control-label'}, 'E-mail:'),
                div({className:'col-sm-10'},
                   input({ className:'form-control', type:'text', maxLength:'80', valueLink: this.linkState('email') })
