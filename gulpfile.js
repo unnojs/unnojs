@@ -33,6 +33,6 @@ gulp.task('gzip', function() {
 gulp.task('default', ['clean','jshint'], function() {
    gulp.src(deps)
        .pipe(concat('unno.min.js'))
-      //  .pipe(uglify())
+       .pipe(uglify())
        .pipe(gulp.dest('./build'));
 });
