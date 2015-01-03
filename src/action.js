@@ -18,7 +18,10 @@
    function _createActions(def) {
       if (!this.util.isObject(def)) return;
       Object.keys(def).forEach(function(name) {
-         this.actions[name] = new Action(name, def[name]);
+         if (this.actions[name])
+            console.warn('The '+name+' action already exists in the registry with another handler.');
+         else
+            this.actions[name] = new Action(name, def[name]);
       }.bind(this));
    }
 
@@ -43,7 +46,6 @@
 
       var listActions = this.actions;
       Object.keys(listActions).forEach(function(actionName) {
-         var action = null;
          if (actionName === expr) {
             action = listActions[actionName];
             action.trigger(data);

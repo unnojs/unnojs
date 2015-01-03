@@ -9,6 +9,7 @@ var deps = [
    './node_modules/react/dist/react-with-addons.js',
    './node_modules/react-router/dist/react-router.js',
    './src/unno.js',
+   './src/util.js',
    './src/storage.js',
    './src/dispatcher.js',
    './src/action.js',

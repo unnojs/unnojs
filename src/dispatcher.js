@@ -9,6 +9,7 @@
 	};
 
 	Dispatcher.prototype = {
+		// this method will be your signature changed in 1.2.0 version
 		dispatch: function(eventName, err, payload) {
 			var events = this._events[eventName];
 			if (events) {
@@ -18,6 +19,7 @@
 			}
 		},
 
+		// this method will be removed in 1.2.0 version
 		fire: function(payload) {
 			var _stores = unno.stores, funcName = '', _binds;
 
@@ -45,6 +47,7 @@
 			return _id;
 		},
 
+		// this method will be removed in 1.2.0 version
 		unregister: function(id) {
 			var idx, _event, count, handler, pos;
 
@@ -72,6 +75,5 @@
 	};
 
 	if (exports) exports.dispatcher = new Dispatcher();
-	if (global) global.dispatcher = new Dispatcher();
+	global.dispatcher = new Dispatcher();
 })(window.Unno, window.unno);
-/* ------------------------[End Dispatcher]--------------------------- */

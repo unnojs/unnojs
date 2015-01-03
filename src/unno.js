@@ -25,26 +25,6 @@
    'use strict';
    var attr;
 
-   /*----------------- Utilities/Helpers ---------------------------------- */
-   function isNull(value) { return (value === null || value === undefined); }
-   function isObject(value) { return (typeof value === 'object'); }
-   function isFunction(value) { return (typeof value === 'function'); }
-   function isArray(value) { return (value instanceof Array); }
-
-   function each(list, callback) {
-      if (isNull(list) || isFunction(list)) return;
-      for(var idx=0, count = list.length; idx<count; idx++) {
-         callback(list[idx], idx);
-      }
-   }
-
-   function _copy(from, to) {
-     Object.keys(from).forEach(function(key) {
-       if (to.prototype) { to.prototype[key] = from[key]; }
-       else { to[key] = from[key]; }
-     });
-   }
-
    var ChangeStatePropertyMixin = {
       changeState: function(property, value) {
          var _state = this.state;
@@ -55,44 +35,35 @@
 
    var Unno = {
       VERSION: '1.1.0',
-      util: {
-         each: each,
-         merge: _copy,
-         copy: _copy,
-         isNull: isNull,
-         isObject: isObject,
-         isArray: isArray,
-         isFunction: isFunction
-      },
+      util: Utils,
       __queue__: {},
       services: {},
       actions: {},
       modules: {},
       components: {},
-      imports: {},
       stores: {},
 
       processQueue: function() {
-         var key, obj, o=[], count=0;
+         var key, obj, deps=[], count=0;
          for(key in this.__queue__) {
             obj = this.__queue__[key];
             if (obj.type === 'component') {
                this.component(key, obj.dependencies, obj.value);
-               o.push(key);
+               deps.push(key);
             } else if (obj.type === 'store') {
                this.store(key, obj.dependencies, obj.value);
-               o.push(key);
+               deps.push(key);
             }
             count++;
          }
 
-         if (o.length == count) {
+         if (deps.length == count) {
             this.__queue__ = {};
          } else {
-            for (key in o) { delete this.__queue__[key]; }
-            o='';
-            for (key in this.__queue__) { o += key; }
-            throw new Error('Those dependencies were not found. ' + o.join(','));
+            for (key in deps) { delete this.__queue__[key]; }
+            deps='';
+            for (key in this.__queue__) { deps += key; }
+            throw new Error('Those dependencies were not found. ' + deps.join(','));
          }
       },
 
@@ -110,13 +81,13 @@
                dependency = this.services[depName];
             } else {
                dependency = this.modules[depName];
-               if (isNull(dependency))
+               if (this.util.isNull(dependency))
                   dependency = this.components[depName];
             }
 
-            if (isNull(dependency)) {
+            if (this.util.isNull(dependency)) {
                err = new Error(depName+' dependency could not be found.');
-               err.depName = depName;
+               err.dependency = depName;
                throw err;
             } else
                depsArray.push(dependency);
@@ -127,11 +98,13 @@
       module: function(name, deps, constructor) {
          var validParams, dependencies = [];
 
+         // returns a module from registry
          if (arguments.length == 1) return this.modules[name];
 
          if (arguments.length < 3) {
             throw new Error(name+' module signature does not defined correctly.');
          }
+
          validParams = (isFunction(constructor) && isArray(deps));
          if (!validParams) {
             throw new Error(name+' module does not define correct parameters type. Hint: [string, array, function]');
@@ -147,6 +120,7 @@
          }
       },
 
+      // register or gets a component into registry
       component: function(name, deps, obj) {
          var key, R = this.services.react, component, componentClass, dependencies = [];
 
@@ -173,6 +147,7 @@
 
          component = obj.apply(null, dependencies);
 
+         // checks if JSX transformer exists
          if (window.JSXTransformer) {
             this.components[name] = R.createFactory(component);
          } else {
