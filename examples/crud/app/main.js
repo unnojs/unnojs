@@ -1,6 +1,6 @@
-unno.module('app', ['$react', 'App'], function(React, App) {
+Unno.module('app', ['$react', 'App'], function(React, App) {
 
-   unno.createActions({
+   Unno.createActions({
       'ADD': 'ADD_CONTACT',
       'DEL': 'DEL_CONTACT',
       'GET': 'GET_CONTACTS'

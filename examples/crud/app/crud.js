@@ -138,7 +138,7 @@ Unno.component('ContactForm', ['$dom', '$addons'], function(D, addons) {
 /**
  * Contact Table
  */
-unno.component('ContactTable', ['$dom'], function(D) {
+Unno.component('ContactTable', ['$dom'], function(D) {
 
    var TableHeader = [
       D.th({key:1, width:'25%'}, '#'),
@@ -153,15 +153,15 @@ unno.component('ContactTable', ['$dom'], function(D) {
       },
 
       componentWillMount: function() {
-         unno.store('ContactStore').on(this.handleUpdate);
+         Unno.store('ContactStore').on(this.handleUpdate);
       },
 
       componentWillUnmount: function() {
-         unno.store('ContactStore').off(this.handleUpdate);
+         Unno.store('ContactStore').off(this.handleUpdate);
       },
 
       componentDidMount: function() {
-         unno.trigger('GET');
+         Unno.trigger('GET');
       },
 
       handleUpdate: function(state) {
@@ -172,7 +172,7 @@ unno.component('ContactTable', ['$dom'], function(D) {
          e.stopPropagation();
          var val = e.target.getAttribute('data-id');
          if (confirm('Are you wish remove this contact ?')) {
-            unno.trigger('DEL', val);
+            Unno.trigger('DEL', val);
          }
       },
 

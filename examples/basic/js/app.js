@@ -1,6 +1,6 @@
 
 // Home component
-unno.component('Home', ['$dom', 'List'], function(DOM, Players) {
+Unno.component('Home', ['$dom', 'List'], function(DOM, Players) {
    'use strict';
 
    var div = DOM.div,
@@ -21,7 +21,7 @@ unno.component('Home', ['$dom', 'List'], function(DOM, Players) {
 });
 
 // list component
-unno.component('List', ['$dom'], function(DOM) {
+Unno.component('List', ['$dom'], function(DOM) {
    'use strict';
 
    var div = DOM.div, ul = DOM.ul, li = DOM.li, h3 = DOM.h3;
@@ -49,7 +49,7 @@ unno.component('List', ['$dom'], function(DOM) {
 });
 
 // main module
-unno.module('main', ['$react', 'Home'], function(React, App) {
+Unno.module('main', ['$react', 'Home'], function(React, App) {
    'use strict';
 
    React.render(App({}), document.getElementById('app'));
