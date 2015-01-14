@@ -9,7 +9,7 @@
   "version": "1.1.0",
   "private": false,
   "scripts": {
-    "build": "gulp"
+    "build": "grunt build"
   },
   "dependencies": {
     "react": "^0.12.2",
